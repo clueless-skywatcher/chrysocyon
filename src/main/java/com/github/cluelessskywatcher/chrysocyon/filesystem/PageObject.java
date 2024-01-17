@@ -98,7 +98,7 @@ public class PageObject {
         return Integer.SIZE + (len * (int) charBytes);
     }
 
-    ByteBuffer getContents() {
+    ByteBuffer getContentBuffer() {
         buffer.position(0);
         return buffer;
     }
