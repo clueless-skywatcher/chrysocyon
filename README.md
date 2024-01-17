@@ -1,0 +1,1 @@
+Chrysocyon is aimed to be a relational database, based on SimpleDB by Edward Sciore.
