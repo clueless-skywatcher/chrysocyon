@@ -13,8 +13,8 @@ public class FileManager {
     private @Getter int blockSize;
     private @Getter boolean isNew;
     private Map<String, RandomAccessFile> openFiles = new HashMap<>();
-    private Map<String, Integer> blocksRead = new HashMap<>();
-    private Map<String, Integer> blocksWritten = new HashMap<>();
+    private @Getter int blocksRead = 0;
+    private @Getter int blocksWritten = 0;
 
     public FileManager(File directory, int blockSize) {
         this.directory = directory;
@@ -38,7 +38,7 @@ public class FileManager {
             raf.seek(block.getBlockNumber() * blockSize);
             raf.getChannel().read(p.getContentBuffer());
 
-            blocksRead.put(block.getFileName(), blocksRead.getOrDefault(block.getFileName(), 0) + 1);
+            blocksRead++;
         }
         catch (IOException e) {
             throw new RuntimeException("Failed to read from block " + block.toString());
@@ -51,7 +51,7 @@ public class FileManager {
             raf.seek(block.getBlockNumber() * blockSize);
             raf.getChannel().write(p.getContentBuffer());
 
-            blocksWritten.put(block.getFileName(), blocksWritten.getOrDefault(block.getFileName(), 0) + 1);
+            blocksWritten++;
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -96,4 +96,5 @@ public class FileManager {
         }
         return raf;
     }
+
 }
