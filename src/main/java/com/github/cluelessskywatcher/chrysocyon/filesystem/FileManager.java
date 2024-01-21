@@ -32,6 +32,11 @@ public class FileManager {
         }
     }
 
+    /**
+     * Read the contents of a given block into a given page
+     * @param block
+     * @param p
+     */
     public synchronized void readBlock(BlockIdentifier block, PageObject p) {
         try {
             RandomAccessFile raf = getFile(block.getFileName());
@@ -45,6 +50,12 @@ public class FileManager {
         }
     }
 
+    /**
+     * Writes the contents of a given page into a given block of memory,
+     * given by a block identifier
+     * @param block
+     * @param p
+     */
     public synchronized void writeBlock(BlockIdentifier block, PageObject p) {
         try {
             RandomAccessFile raf = getFile(block.getFileName());
@@ -76,6 +87,11 @@ public class FileManager {
         return block;
     }
 
+    /**
+     * Retrieves the number of blocks in a given file name
+     * @param fileName name of the file
+     * @return number of blocks that fit in the file
+     */
     public int length(String fileName) {
         try {
             RandomAccessFile raf = getFile(fileName);
