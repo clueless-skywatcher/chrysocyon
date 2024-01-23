@@ -11,7 +11,7 @@ public class FileManagerTest {
     @Test
     public void testBlockReadWrite() {
         Chrysocyon kuon = Chrysocyon.getInstance();
-        FileManager fileManager = kuon.getFileManager();
+        ChrysoFileManager fileManager = kuon.getFileManager();
 
         BlockIdentifier block = new BlockIdentifier("file1.dat", 2);
 

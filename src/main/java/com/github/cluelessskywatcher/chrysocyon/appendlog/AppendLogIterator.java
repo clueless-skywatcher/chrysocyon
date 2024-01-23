@@ -3,17 +3,17 @@ package com.github.cluelessskywatcher.chrysocyon.appendlog;
 import java.util.Iterator;
 
 import com.github.cluelessskywatcher.chrysocyon.filesystem.BlockIdentifier;
-import com.github.cluelessskywatcher.chrysocyon.filesystem.FileManager;
+import com.github.cluelessskywatcher.chrysocyon.filesystem.ChrysoFileManager;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.PageObject;
 
 public class AppendLogIterator implements Iterator<byte []> {
-    private FileManager fileManager;
+    private ChrysoFileManager fileManager;
     private BlockIdentifier block;
     private PageObject page;
     private int currentPosition;
     private int boundary;
 
-    public AppendLogIterator(FileManager fileManager, BlockIdentifier block) {
+    public AppendLogIterator(ChrysoFileManager fileManager, BlockIdentifier block) {
         this.fileManager = fileManager;
         this.block = block;
         byte[] b = new byte[fileManager.getBlockSize()];

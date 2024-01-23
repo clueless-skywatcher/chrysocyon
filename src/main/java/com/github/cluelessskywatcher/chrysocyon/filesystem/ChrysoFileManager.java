@@ -8,7 +8,7 @@ import java.util.Map;
 
 import lombok.Getter;
 
-public class FileManager {
+public class ChrysoFileManager {
     private @Getter File directory;
     private @Getter int blockSize;
     private @Getter boolean isNew;
@@ -16,7 +16,7 @@ public class FileManager {
     private @Getter int blocksRead = 0;
     private @Getter int blocksWritten = 0;
 
-    public FileManager(File directory, int blockSize) {
+    public ChrysoFileManager(File directory, int blockSize) {
         this.directory = directory;
         this.blockSize = blockSize;
         isNew = !directory.exists();

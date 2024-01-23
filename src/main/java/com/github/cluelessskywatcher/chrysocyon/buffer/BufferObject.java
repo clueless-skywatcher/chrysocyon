@@ -2,13 +2,13 @@ package com.github.cluelessskywatcher.chrysocyon.buffer;
 
 import com.github.cluelessskywatcher.chrysocyon.appendlog.AppendLogManager;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.BlockIdentifier;
-import com.github.cluelessskywatcher.chrysocyon.filesystem.FileManager;
+import com.github.cluelessskywatcher.chrysocyon.filesystem.ChrysoFileManager;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.PageObject;
 
 import lombok.Getter;
 
 public class BufferObject{ 
-    private @Getter FileManager fileManager;
+    private @Getter ChrysoFileManager fileManager;
     private @Getter AppendLogManager logManager;
     private @Getter BlockIdentifier block = null;
     private @Getter PageObject page;
@@ -17,7 +17,7 @@ public class BufferObject{
 
     private int pins = 0;
 
-    public BufferObject(FileManager fileManager, AppendLogManager logManager) {
+    public BufferObject(ChrysoFileManager fileManager, AppendLogManager logManager) {
         this.fileManager = fileManager;
         this.logManager = logManager;
         page = new PageObject(fileManager.getBlockSize());

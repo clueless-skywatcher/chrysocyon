@@ -3,20 +3,20 @@ package com.github.cluelessskywatcher.chrysocyon.appendlog;
 import java.util.Iterator;
 
 import com.github.cluelessskywatcher.chrysocyon.filesystem.BlockIdentifier;
-import com.github.cluelessskywatcher.chrysocyon.filesystem.FileManager;
+import com.github.cluelessskywatcher.chrysocyon.filesystem.ChrysoFileManager;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.PageObject;
 
 import lombok.Getter;
 
 public class AppendLogManager {
-    private @Getter FileManager fileManager;
+    private @Getter ChrysoFileManager fileManager;
     private @Getter String logFile;
     private @Getter PageObject lastLogPage;
     private @Getter BlockIdentifier currentBlock;
     private @Getter int latestLogSeqNo = 0;
     private @Getter int lastSavedLogSeqNo = 0;
 
-    public AppendLogManager(FileManager fileManager, String logFile) {
+    public AppendLogManager(ChrysoFileManager fileManager, String logFile) {
         this.fileManager = fileManager;
         this.logFile = logFile;
 

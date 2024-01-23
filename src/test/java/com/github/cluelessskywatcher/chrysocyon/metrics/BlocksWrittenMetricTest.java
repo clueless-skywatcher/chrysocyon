@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.BlockIdentifier;
-import com.github.cluelessskywatcher.chrysocyon.filesystem.FileManager;
+import com.github.cluelessskywatcher.chrysocyon.filesystem.ChrysoFileManager;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.PageObject;
 
 public class BlocksWrittenMetricTest {
@@ -15,7 +15,7 @@ public class BlocksWrittenMetricTest {
     @Test
     public void testBlocksRead() {
         Chrysocyon kuon = Chrysocyon.getInstance();
-        FileManager fileManager = kuon.getFileManager();
+        ChrysoFileManager fileManager = kuon.getFileManager();
 
         BlockIdentifier block = new BlockIdentifier("file1.dat", 2);
 

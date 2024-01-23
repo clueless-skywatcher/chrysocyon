@@ -5,7 +5,7 @@ import com.github.cluelessskywatcher.chrysocyon.buffer.exceptions.BufferPinAbort
 import com.github.cluelessskywatcher.chrysocyon.buffer.replacement.BufferReplacementStrategy;
 import com.github.cluelessskywatcher.chrysocyon.buffer.replacement.ReplacementStrategyEnum;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.BlockIdentifier;
-import com.github.cluelessskywatcher.chrysocyon.filesystem.FileManager;
+import com.github.cluelessskywatcher.chrysocyon.filesystem.ChrysoFileManager;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ public class BufferPoolManager {
     private @Getter @Setter ReplacementStrategyEnum replacementStrategy;
     private static final long MAX_PINNING_WAIT_TIME = 10000;
 
-    public BufferPoolManager(FileManager fileManager, AppendLogManager logManager, int bufferCount) {
+    public BufferPoolManager(ChrysoFileManager fileManager, AppendLogManager logManager, int bufferCount) {
         this.bufferPool = new BufferObject[bufferCount];
         this.availableBufferCount = bufferCount;
         for (int i = 0; i < bufferCount; i++) {
@@ -25,7 +25,7 @@ public class BufferPoolManager {
         this.replacementStrategy = ReplacementStrategyEnum.NAIVE;
     }
 
-    public BufferPoolManager(FileManager fileManager, AppendLogManager logManager, int bufferCount, ReplacementStrategyEnum strategy) {
+    public BufferPoolManager(ChrysoFileManager fileManager, AppendLogManager logManager, int bufferCount, ReplacementStrategyEnum strategy) {
         bufferPool = new BufferObject[bufferCount];
         availableBufferCount = bufferCount;
         for (int i = 0; i < bufferCount; i++) {
