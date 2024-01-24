@@ -34,6 +34,10 @@ public class Chrysocyon {
         instance = null;
     }
 
+    public void nonStaticFactoryReset() {
+        clearAllFiles(this.fileManager.getDirectory());
+    }
+
     private static void clearAllFiles(File dir) {
         File[] contents = dir.listFiles();
         if (contents != null) {

@@ -5,7 +5,7 @@ import java.util.Iterator;
 import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.PageObject;
 
-public class AppendLogTest {
+public class AppendLogRun {
     private static AppendLogManager lm;
 
     public static void main(String[] args) {
@@ -16,6 +16,7 @@ public class AppendLogTest {
         createRecords(36, 70);
         lm.flushToFile(65);
         printLogRecords("The log file now has these records:");
+        db.nonStaticFactoryReset();
     }
 
     private static void printLogRecords(String msg) {

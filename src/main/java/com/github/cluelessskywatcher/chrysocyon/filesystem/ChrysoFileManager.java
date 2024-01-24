@@ -46,6 +46,7 @@ public class ChrysoFileManager {
             blocksRead++;
         }
         catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException("Failed to read from block " + block.toString());
         }
     }

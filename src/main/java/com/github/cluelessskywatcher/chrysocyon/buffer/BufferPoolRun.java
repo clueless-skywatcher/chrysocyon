@@ -4,7 +4,7 @@ import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.BlockIdentifier;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.PageObject;
 
-public class BufferPoolTest {
+public class BufferPoolRun {
     public static void main(String[] args) {
         Chrysocyon db = new Chrysocyon("buffertest", 400, 3);
         BufferPoolManager bm = db.getBufferPoolManager();
@@ -32,5 +32,7 @@ public class BufferPoolTest {
         p2.setInt(9999, 80); // This modification
         buff2.setModified(1, 0); // won't get written to disk.
         bm.unpinBuffer(buff2);
+
+        db.nonStaticFactoryReset();
     }
 }

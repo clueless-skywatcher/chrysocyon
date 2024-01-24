@@ -33,7 +33,7 @@ public class LockTable {
              */
             long timestamp = System.currentTimeMillis();
             /*
-             * If the block has an exclusive lock by some transaction and our 
+             * If the block has an exclusive lock by some other transaction and our 
              * wait time has not exceeded, keep waiting
              */
             while (hasExclusiveLock(block) && !waitTimeExceeded(timestamp)) {
