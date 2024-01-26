@@ -16,6 +16,13 @@ public class BufferPoolManager {
     private @Getter @Setter ReplacementStrategyEnum replacementStrategy;
     private static final long MAX_PINNING_WAIT_TIME = 10000;
 
+    /**
+     * Class to manage buffers that transactions use to read or write
+     * data from or to local memory
+     * @param fileManager The manager object that manages the files
+     * @param logManager The manager object that manages logs
+     * @param bufferCount Number of buffers that will be used.
+     */
     public BufferPoolManager(ChrysoFileManager fileManager, AppendLogManager logManager, int bufferCount) {
         this.bufferPool = new BufferObject[bufferCount];
         this.availableBufferCount = bufferCount;
@@ -38,6 +45,11 @@ public class BufferPoolManager {
         return availableBufferCount;
     }
 
+    /**
+     * Pins a buffer, i.e. marks the
+     * @param block
+     * @return
+     */
     public synchronized BufferObject pinBuffer(BlockIdentifier block) {
         try {
             long timestamp = System.currentTimeMillis();

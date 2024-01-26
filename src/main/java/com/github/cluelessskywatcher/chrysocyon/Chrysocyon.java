@@ -5,6 +5,7 @@ import java.io.File;
 import com.github.cluelessskywatcher.chrysocyon.appendlog.AppendLogManager;
 import com.github.cluelessskywatcher.chrysocyon.buffer.BufferPoolManager;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.ChrysoFileManager;
+import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 
 import lombok.Getter;
 
@@ -46,5 +47,9 @@ public class Chrysocyon {
             }
         }
         dir.delete();
+    }
+
+    public ChrysoTransaction newTransaction() {
+        return new ChrysoTransaction(fileManager, logManager, bufferPoolManager);
     }
 }

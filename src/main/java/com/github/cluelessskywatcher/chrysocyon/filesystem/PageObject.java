@@ -95,7 +95,7 @@ public class PageObject {
         float charBytes = CC_CHARSET.newEncoder().maxBytesPerChar();
 
         // Additional integer bytes are added to denote the string length
-        return Integer.SIZE + (len * (int) charBytes);
+        return Integer.BYTES + (len * (int) charBytes);
     }
 
     ByteBuffer getContentBuffer() {

@@ -16,6 +16,12 @@ public class AppendLogManager {
     private @Getter int latestLogSeqNo = 0;
     private @Getter int lastSavedLogSeqNo = 0;
 
+    /**
+     * Class for managing log files that record database logs used
+     * for rollback, commit and data updates 
+     * @param fileManager
+     * @param logFile
+     */
     public AppendLogManager(ChrysoFileManager fileManager, String logFile) {
         this.fileManager = fileManager;
         this.logFile = logFile;
@@ -58,7 +64,8 @@ public class AppendLogManager {
          * Since I had a huge problem in understanding this, I need to take notes
          * and make it easier for the reader.
          * As per Edward Sciore's book, log records are inserted in each block
-         * from RIGHT to LEFT to make it easy for reads in the reverse order.
+         * from RIGHT to LEFT to make it easy for the recovery manager to perform reads 
+         * in the reverse order.
          * 
          * The initial 4 bytes of the page hold the "boundary" of the page,
          * the position where the latest log record was inserted. 
@@ -76,9 +83,6 @@ public class AppendLogManager {
          * Set the new boundary to the beginning position of the record we 
          * just inserted.
          */
-        
-
-
         int boundary = lastLogPage.getInt(0);
         int recordSize = logRecord.length;
 
