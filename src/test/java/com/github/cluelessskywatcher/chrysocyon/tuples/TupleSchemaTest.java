@@ -1,13 +1,10 @@
 package com.github.cluelessskywatcher.chrysocyon.tuples;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
-import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.IntegerInfo;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.VarStringInfo;
 
