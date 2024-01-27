@@ -23,4 +23,8 @@ public enum TupleDataType {
     public static TupleDataType getTypeFromCode(int code) {
         return code2Type.get(code);
     }
+
+    public int getCode() {
+        return this.code;
+    }
 }
