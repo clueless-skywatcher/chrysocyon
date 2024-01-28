@@ -1,4 +1,4 @@
-package com.github.cluelessskywatcher.chrysocyon.metadata.metatables;
+package com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params;
 
 import lombok.Getter;
 

@@ -4,11 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.AbstractMetaTable;
-import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.AbstractMetaTableParameters;
-import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.FieldCatalogParameters;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.FieldCatalogTable;
-import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.SchemaCatalogParameters;
+import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.FieldStatisticsTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.SchemaCatalogTable;
+import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.TableStatisticsTable;
+import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.ViewCatalogTable;
+import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.AbstractMetaTableParameters;
+import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.FieldCatalogParameters;
+import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.SchemaCatalogParameters;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
@@ -23,6 +26,9 @@ public class TableManager {
     static {
         metaTables.put(MetaTableEnum.SCHEMA_CATALOG, new SchemaCatalogTable());
         metaTables.put(MetaTableEnum.FIELD_CATALOG, new FieldCatalogTable());
+        metaTables.put(MetaTableEnum.VIEW_CATALOG, new ViewCatalogTable());
+        metaTables.put(MetaTableEnum.TABLE_STATISTICS, new TableStatisticsTable());
+        metaTables.put(MetaTableEnum.FIELD_STATISTICS, new FieldStatisticsTable());
     }
 
     public TableManager(boolean isNew, ChrysoTransaction tx) {
@@ -36,7 +42,7 @@ public class TableManager {
     public void createTable(ChrysoTransaction txn, String tableName, TupleSchema schema) {
         TupleLayout layout = new TupleLayout(schema);
         AbstractMetaTableParameters params = new SchemaCatalogParameters(tableName, layout);
-        metaTables.get(MetaTableEnum.SCHEMA_CATALOG).insertData(txn, params);
+        insertDataToMetaTable(txn, MetaTableEnum.SCHEMA_CATALOG, params);
 
         for (String field : schema.getFields()) {
             AbstractMetaTableParameters fcParams = new FieldCatalogParameters(
@@ -45,7 +51,7 @@ public class TableManager {
                 layout.getOffset(field),
                 schema.length(field) 
             );
-            metaTables.get(MetaTableEnum.FIELD_CATALOG).insertData(txn, fcParams);
+            insertDataToMetaTable(txn, MetaTableEnum.FIELD_CATALOG, fcParams);
         }
     }
 
@@ -93,4 +99,15 @@ public class TableManager {
         return new TupleLayout(schema, offsets, size);
     }
 
+    public TupleLayout getMetaTableLayout(MetaTableEnum mt, ChrysoTransaction tx) {
+        return getLayout(metaTables.get(mt).getTableName(), tx);
+    }
+
+    public static String getMetaTableName(MetaTableEnum mt) {
+        return metaTables.get(mt).getTableName();
+    }
+
+    public void insertDataToMetaTable(ChrysoTransaction txn, MetaTableEnum mt, AbstractMetaTableParameters params) {
+        metaTables.get(mt).insertData(txn, params);
+    }
 }

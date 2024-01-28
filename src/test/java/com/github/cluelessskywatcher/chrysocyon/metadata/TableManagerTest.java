@@ -12,11 +12,12 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
-import com.github.cluelessskywatcher.chrysocyon.metadata.TableManager;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
+import com.github.cluelessskywatcher.chrysocyon.tuples.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
-import com.github.cluelessskywatcher.chrysocyon.tuples.TuplePage;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
+import com.github.cluelessskywatcher.chrysocyon.tuples.data.IntegerField;
+import com.github.cluelessskywatcher.chrysocyon.tuples.data.VarStringField;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.IntegerInfo;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.TupleDataType;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.VarStringInfo;

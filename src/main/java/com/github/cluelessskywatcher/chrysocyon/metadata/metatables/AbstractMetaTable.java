@@ -1,6 +1,8 @@
 package com.github.cluelessskywatcher.chrysocyon.metadata.metatables;
 
+import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.AbstractMetaTableParameters;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
+import com.github.cluelessskywatcher.chrysocyon.tuples.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 
@@ -26,5 +28,9 @@ public abstract class AbstractMetaTable {
 
     public int getOffset(String fieldName) {
         return layout.getOffset(fieldName);
+    }
+
+    public TableScan getScan(ChrysoTransaction tx) {
+        return new TableScan(tx, tableName, layout);
     }
 }
