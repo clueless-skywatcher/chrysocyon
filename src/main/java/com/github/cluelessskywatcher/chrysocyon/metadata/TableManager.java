@@ -17,7 +17,7 @@ import com.github.cluelessskywatcher.chrysocyon.tuples.info.IntegerInfo;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.TupleDataType;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.VarStringInfo;
 
-public class MetadataManager {
+public class TableManager {
     private static Map<MetaTableEnum, AbstractMetaTable> metaTables = new HashMap<>();
 
     static {
@@ -25,7 +25,7 @@ public class MetadataManager {
         metaTables.put(MetaTableEnum.FIELD_CATALOG, new FieldCatalogTable());
     }
 
-    public MetadataManager(boolean isNew, ChrysoTransaction tx) {
+    public TableManager(boolean isNew, ChrysoTransaction tx) {
         if (isNew) {
             for (AbstractMetaTable mt : metaTables.values()) {
                 createTable(tx, mt.getTableName(), mt.getSchema());
