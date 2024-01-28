@@ -31,6 +31,7 @@ public class TableStatisticsTable extends AbstractMetaTable {
         TableStatisticsParameters tsParams = (TableStatisticsParameters) params;
         
         TableScan tsScan = new TableScan(txn, tableName, layout);
+        tsScan.insert();
         tsScan.setData("table_name", new VarStringField(tsParams.getTableName(), TableConstants.MAX_TABLE_NAME_SIZE));
         tsScan.setData("num_blocks", new IntegerField(tsParams.getNumBlocks()));
         tsScan.setData("num_records", new IntegerField(tsParams.getNumRecords()));

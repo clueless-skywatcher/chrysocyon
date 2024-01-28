@@ -6,6 +6,7 @@ import java.util.Map;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.AbstractMetaTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.FieldCatalogTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.FieldStatisticsTable;
+import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.IndexCatalogTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.SchemaCatalogTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.TableStatisticsTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.ViewCatalogTable;
@@ -29,6 +30,7 @@ public class TableManager {
         metaTables.put(MetaTableEnum.VIEW_CATALOG, new ViewCatalogTable());
         metaTables.put(MetaTableEnum.TABLE_STATISTICS, new TableStatisticsTable());
         metaTables.put(MetaTableEnum.FIELD_STATISTICS, new FieldStatisticsTable());
+        metaTables.put(MetaTableEnum.INDEX_CATALOG, new IndexCatalogTable());
     }
 
     public TableManager(boolean isNew, ChrysoTransaction tx) {

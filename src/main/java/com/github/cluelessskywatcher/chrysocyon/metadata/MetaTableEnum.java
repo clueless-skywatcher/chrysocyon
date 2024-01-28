@@ -5,5 +5,6 @@ public enum MetaTableEnum {
     FIELD_CATALOG,
     VIEW_CATALOG,
     TABLE_STATISTICS,
-    FIELD_STATISTICS;
+    FIELD_STATISTICS,
+    INDEX_CATALOG;
 }

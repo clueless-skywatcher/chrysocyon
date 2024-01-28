@@ -9,7 +9,7 @@ import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 public class ViewManager {
     private TableManager tableManager;
 
-    public ViewManager(boolean isNew, TableManager tableManager, ChrysoTransaction tx) {
+    public ViewManager(TableManager tableManager, ChrysoTransaction tx) {
         this.tableManager = tableManager;
     }
 

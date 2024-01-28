@@ -11,20 +11,30 @@ import lombok.Getter;
 
 public class Chrysocyon {
     private static Chrysocyon instance = null;
+    private static final String HOME_DIR = "user.dir";
+    private static final String LOG_FILE = "chryso.log";
+    private static final int BUFFER_SIZE = 4;
+    private static final int BLOCK_SIZE = 1024;
 
     private @Getter ChrysoFileManager fileManager;
     private @Getter AppendLogManager logManager;
     private @Getter BufferPoolManager bufferPoolManager;
 
-    public Chrysocyon(String directory, int blockSize, int buffers) {
-        this.fileManager = new ChrysoFileManager(new File(directory), blockSize);
-        this.logManager = new AppendLogManager(fileManager, directory);
+    public Chrysocyon(String dirName, int blockSize, int buffers) {
+        String home = System.getProperty(HOME_DIR);
+        File directory = new File(home, dirName);
+        this.fileManager = new ChrysoFileManager(directory, blockSize);
+        this.logManager = new AppendLogManager(fileManager, LOG_FILE);
         this.bufferPoolManager = new BufferPoolManager(fileManager, logManager, buffers);
+    }
+
+    public Chrysocyon(String dirName) {
+        this(dirName, BLOCK_SIZE, BUFFER_SIZE);
     }
 
     public static Chrysocyon getInstance() {
         if (instance == null) {
-            instance = new Chrysocyon(".chrysocyon", 1024, 3);
+            instance = new Chrysocyon(".chrysocyon");
         }
 
         return instance;

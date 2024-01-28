@@ -138,6 +138,7 @@ public class CatalogTest {
 
     @AfterAll
     public void shutDown() {
+        transaction.commit();
         db.nonStaticFactoryReset();
     }
 }
