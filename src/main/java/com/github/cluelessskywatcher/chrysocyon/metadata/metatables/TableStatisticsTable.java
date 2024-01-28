@@ -1,12 +1,10 @@
 package com.github.cluelessskywatcher.chrysocyon.metadata.metatables;
 
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.constants.TableConstants;
-import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.constants.ViewConstants;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.AbstractMetaTableParameters;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.TableStatisticsParameters;
-import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.ViewCatalogParameters;
+import com.github.cluelessskywatcher.chrysocyon.processing.scans.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
-import com.github.cluelessskywatcher.chrysocyon.tuples.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.IntegerField;
@@ -31,6 +29,7 @@ public class TableStatisticsTable extends AbstractMetaTable {
         TableStatisticsParameters tsParams = (TableStatisticsParameters) params;
         
         TableScan tsScan = new TableScan(txn, tableName, layout);
+        tsScan.insert();
         tsScan.setData("table_name", new VarStringField(tsParams.getTableName(), TableConstants.MAX_TABLE_NAME_SIZE));
         tsScan.setData("num_blocks", new IntegerField(tsParams.getNumBlocks()));
         tsScan.setData("num_records", new IntegerField(tsParams.getNumRecords()));

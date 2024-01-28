@@ -1,6 +1,6 @@
 package com.github.cluelessskywatcher.chrysocyon.tuples.data;
 
-public class IntegerField implements DataField {
+public class IntegerField implements DataField, Comparable<IntegerField>  {
     private int value;
 
     public IntegerField(int value) {
@@ -24,5 +24,18 @@ public class IntegerField implements DataField {
             return this.value == ((IntegerField)other).value;
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(IntegerField o) {
+        return Integer.compare((int) this.getValue(), (int) o.getValue());
+    }
+
+    public int hashCode() {
+        return this.getValue().hashCode();
+    }
+
+    public String toString() {
+        return this.getValue().toString();
     }
 }

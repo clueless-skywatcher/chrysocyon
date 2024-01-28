@@ -9,14 +9,7 @@ import com.github.cluelessskywatcher.chrysocyon.buffer.BufferObject;
 import com.github.cluelessskywatcher.chrysocyon.buffer.BufferPoolManager;
 import com.github.cluelessskywatcher.chrysocyon.filesystem.BlockIdentifier;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
-import com.github.cluelessskywatcher.chrysocyon.transactions.recovery.logrecord.CheckpointLogRecord;
-import com.github.cluelessskywatcher.chrysocyon.transactions.recovery.logrecord.CommitTransactionLogRecord;
-import com.github.cluelessskywatcher.chrysocyon.transactions.recovery.logrecord.RecoveryLogRecord;
-import com.github.cluelessskywatcher.chrysocyon.transactions.recovery.logrecord.RecoveryLogRecordType;
-import com.github.cluelessskywatcher.chrysocyon.transactions.recovery.logrecord.RollbackTransactionLogRecord;
-import com.github.cluelessskywatcher.chrysocyon.transactions.recovery.logrecord.SetIntegerLogRecord;
-import com.github.cluelessskywatcher.chrysocyon.transactions.recovery.logrecord.SetStringLogRecord;
-import com.github.cluelessskywatcher.chrysocyon.transactions.recovery.logrecord.StartTransactionLogRecord;
+import com.github.cluelessskywatcher.chrysocyon.transactions.recovery.logrecord.*;
 
 import lombok.Getter;
 
@@ -41,17 +34,27 @@ public class RecoveryManager {
     }
 
     private void performRecover() {
+        // Maintain the list of finished (committed or rolled back) transactions
         Collection<Integer> finishedTransactions = new ArrayList<>();
+        // Iterate through the log record file backwards
         Iterator<byte []> logIterator = logManager.iterator();
+        // While we have a log record
         while (logIterator.hasNext()) {
+            // Get the record bytes
             byte[] record = logIterator.next();
+            // Parse the record bytes into a meaningful record object
             RecoveryLogRecord logRecord = RecoveryLogRecordType.createRecord(record);
+            // If this is a checkpoint we don't need to proceed further
             if (logRecord.type() == RecoveryLogRecordType.CHECKPOINT) {
                 return;
             }
+            // If record is a commit or rollback operation, the transaction finished at some point
+            // Add it to the list of finished transactions
             if (logRecord.type() == RecoveryLogRecordType.COMMIT_TRANSACTION || logRecord.type() == RecoveryLogRecordType.ROLLBACK_TRANSACTION) {
                 finishedTransactions.add(logRecord.getTransaction());
             }
+            // If list of finished transactions does not contain the current log record,
+            // undo whatever was done in the log by the transaction
             else if (!finishedTransactions.contains(logRecord.getTransaction())) {
                 logRecord.undo(txn);
             }

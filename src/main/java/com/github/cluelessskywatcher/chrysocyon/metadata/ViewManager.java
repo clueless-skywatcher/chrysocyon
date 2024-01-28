@@ -2,14 +2,14 @@ package com.github.cluelessskywatcher.chrysocyon.metadata;
 
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.AbstractMetaTableParameters;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.ViewCatalogParameters;
+import com.github.cluelessskywatcher.chrysocyon.processing.scans.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
-import com.github.cluelessskywatcher.chrysocyon.tuples.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 
 public class ViewManager {
     private TableManager tableManager;
 
-    public ViewManager(boolean isNew, TableManager tableManager, ChrysoTransaction tx) {
+    public ViewManager(TableManager tableManager, ChrysoTransaction tx) {
         this.tableManager = tableManager;
     }
 

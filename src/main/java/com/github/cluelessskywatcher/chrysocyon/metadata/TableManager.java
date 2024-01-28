@@ -3,17 +3,19 @@ package com.github.cluelessskywatcher.chrysocyon.metadata;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.github.cluelessskywatcher.chrysocyon.metadata.exceptions.TableDoesNotExistException;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.AbstractMetaTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.FieldCatalogTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.FieldStatisticsTable;
+import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.IndexCatalogTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.SchemaCatalogTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.TableStatisticsTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.ViewCatalogTable;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.AbstractMetaTableParameters;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.FieldCatalogParameters;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.SchemaCatalogParameters;
+import com.github.cluelessskywatcher.chrysocyon.processing.scans.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
-import com.github.cluelessskywatcher.chrysocyon.tuples.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.IntegerInfo;
@@ -29,6 +31,7 @@ public class TableManager {
         metaTables.put(MetaTableEnum.VIEW_CATALOG, new ViewCatalogTable());
         metaTables.put(MetaTableEnum.TABLE_STATISTICS, new TableStatisticsTable());
         metaTables.put(MetaTableEnum.FIELD_STATISTICS, new FieldStatisticsTable());
+        metaTables.put(MetaTableEnum.INDEX_CATALOG, new IndexCatalogTable());
     }
 
     public TableManager(boolean isNew, ChrysoTransaction tx) {
@@ -96,6 +99,9 @@ public class TableManager {
             }
         }
         fCatScan.close();
+        if (size == -1 || offsets.size() == 0 || schema.getFields().size() == 0) {
+            throw new TableDoesNotExistException("Table does not exist: " + tableName);
+        }
         return new TupleLayout(schema, offsets, size);
     }
 

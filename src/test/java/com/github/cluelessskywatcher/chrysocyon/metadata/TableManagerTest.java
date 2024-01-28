@@ -1,8 +1,7 @@
 package com.github.cluelessskywatcher.chrysocyon.metadata;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -13,11 +12,8 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
-import com.github.cluelessskywatcher.chrysocyon.tuples.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
-import com.github.cluelessskywatcher.chrysocyon.tuples.data.IntegerField;
-import com.github.cluelessskywatcher.chrysocyon.tuples.data.VarStringField;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.IntegerInfo;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.TupleDataType;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.VarStringInfo;
@@ -30,7 +26,7 @@ public class TableManagerTest {
 
     @BeforeAll
     public void init() {
-        db = new Chrysocyon("metadatamanagertest", 400, 3);
+        db = new Chrysocyon("tablemanagertest");
         transaction = db.newTransaction();
         mtdm = new TableManager(true, transaction);
     }

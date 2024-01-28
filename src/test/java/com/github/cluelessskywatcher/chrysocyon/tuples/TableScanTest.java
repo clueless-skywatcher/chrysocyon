@@ -13,6 +13,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
+import com.github.cluelessskywatcher.chrysocyon.processing.scans.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.IntegerField;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.VarStringField;
@@ -25,7 +26,6 @@ public class TableScanTest {
     private ChrysoTransaction transaction;
     private TupleSchema schema;
     private TupleLayout layout;
-    private TuplePage page;
     private List<Integer> ints;
     private List<String> strs;
 

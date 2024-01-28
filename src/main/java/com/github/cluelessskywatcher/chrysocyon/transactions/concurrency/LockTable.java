@@ -74,14 +74,14 @@ public class LockTable {
             long timestamp = System.currentTimeMillis();
 
             /*
-             * If the block has an exclusive lock by some transaction and our 
+             * If the block has any shared locks by some transaction and our 
              * wait time has not exceeded, keep waiting
              */
             while (hasOtherSharedLocks(block) && !waitTimeExceeded(timestamp)) {
                 wait(MAX_LOCK_WAITING_TIME);    
             }
             /*
-             * Even after waiting for long enough if there is an exclusive lock
+             * Even after waiting for long enough if there are any other shared locks
              * abort the mission
              */
             if (hasOtherSharedLocks(block)) {

@@ -40,14 +40,14 @@ public class ChrysoTransaction {
         recoveryManager.commit();
         concurrencyManager.release();
         buffs.unpinAll();
-        System.out.println(String.format("Transaction %d committed", transactionId));
+        // System.out.println(String.format("Transaction %d committed", transactionId));
     }
 
     public void rollback() {
         recoveryManager.rollback();
         concurrencyManager.release();
         buffs.unpinAll();
-        System.out.println(String.format("Transaction %d rolled back", transactionId));
+        // System.out.println(String.format("Transaction %d rolled back", transactionId));
     }
     public void recover() {
         bufferPoolManager.flushAllBuffers(transactionId);

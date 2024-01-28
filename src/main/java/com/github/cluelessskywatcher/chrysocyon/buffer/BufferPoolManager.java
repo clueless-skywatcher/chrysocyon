@@ -46,7 +46,7 @@ public class BufferPoolManager {
     }
 
     /**
-     * Pins a buffer, i.e. marks the
+     * Pins a buffer, i.e. marks the buffer as being used
      * @param block
      * @return
      */
