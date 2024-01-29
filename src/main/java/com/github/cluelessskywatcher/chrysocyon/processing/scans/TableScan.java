@@ -1,13 +1,15 @@
-package com.github.cluelessskywatcher.chrysocyon.tuples;
+package com.github.cluelessskywatcher.chrysocyon.processing.scans;
 
 import com.github.cluelessskywatcher.chrysocyon.filesystem.BlockIdentifier;
-import com.github.cluelessskywatcher.chrysocyon.processing.UpdaterScan;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
+import com.github.cluelessskywatcher.chrysocyon.tuples.TupleIdentifier;
+import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
+import com.github.cluelessskywatcher.chrysocyon.tuples.TuplePage;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
 
 import lombok.Getter;
 
-public class TableScan implements UpdaterScan {
+public class TableScan implements UpdatableScan {
     private ChrysoTransaction tx;
     private String fileName;
     private TupleLayout layout;

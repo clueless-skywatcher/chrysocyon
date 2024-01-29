@@ -1,7 +1,5 @@
 package com.github.cluelessskywatcher.chrysocyon.tuples;
 
-import com.github.cluelessskywatcher.chrysocyon.tuples.data.IntegerField;
-
 import lombok.Getter;
 
 public class TupleIdentifier {

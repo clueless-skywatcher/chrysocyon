@@ -1,13 +1,12 @@
 package com.github.cluelessskywatcher.chrysocyon.metadata;
 
-import java.time.chrono.ThaiBuddhistEra;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.AbstractMetaTableParameters;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.IndexCatalogParameters;
+import com.github.cluelessskywatcher.chrysocyon.processing.scans.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
-import com.github.cluelessskywatcher.chrysocyon.tuples.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 
 public class TableIndexManager {

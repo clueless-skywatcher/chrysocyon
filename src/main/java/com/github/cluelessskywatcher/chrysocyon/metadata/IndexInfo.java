@@ -4,12 +4,8 @@ import com.github.cluelessskywatcher.chrysocyon.index.TableIndex;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
-import com.github.cluelessskywatcher.chrysocyon.tuples.data.VarStringField;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.DataInfo;
-import com.github.cluelessskywatcher.chrysocyon.tuples.info.VarStringInfo;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.IntegerInfo;
-import com.github.cluelessskywatcher.chrysocyon.tuples.info.TupleDataType;
-
 import lombok.Getter;
 
 public class IndexInfo {
@@ -50,7 +46,7 @@ public class IndexInfo {
         indexSchema.addField(new IntegerInfo(), "block");
         indexSchema.addField(new IntegerInfo(), "id");
 
-        DataInfo dataVal = layout.getSchema().getField(fieldName);
+        DataInfo dataVal = schema.getField(fieldName);
         indexSchema.addField(dataVal, fieldName);
         return new TupleLayout(indexSchema);
     }

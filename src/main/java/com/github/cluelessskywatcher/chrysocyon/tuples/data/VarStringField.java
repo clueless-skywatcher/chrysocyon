@@ -4,7 +4,7 @@ import com.github.cluelessskywatcher.chrysocyon.filesystem.PageObject;
 
 import lombok.Getter;
 
-public class VarStringField implements DataField {
+public class VarStringField implements DataField, Comparable<VarStringField> {
     private String value;
     private @Getter int maxSize;
 
@@ -30,5 +30,18 @@ public class VarStringField implements DataField {
             return this.value.equals(((VarStringField)other).value);
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(VarStringField o) {
+        return ((String) getValue()).compareTo((String) o.getValue());
+    }
+
+    public int hashCode() {
+        return this.getValue().hashCode();
+    }
+
+    public String toString() {
+        return (String) this.getValue();
     }
 }

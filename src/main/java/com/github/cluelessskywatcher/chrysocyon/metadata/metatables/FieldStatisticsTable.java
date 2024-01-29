@@ -2,12 +2,10 @@ package com.github.cluelessskywatcher.chrysocyon.metadata.metatables;
 
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.constants.FieldConstants;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.constants.TableConstants;
-import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.constants.ViewConstants;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.AbstractMetaTableParameters;
 import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.FieldStatisticsParameters;
-import com.github.cluelessskywatcher.chrysocyon.metadata.metatables.params.TableStatisticsParameters;
+import com.github.cluelessskywatcher.chrysocyon.processing.scans.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
-import com.github.cluelessskywatcher.chrysocyon.tuples.TableScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.IntegerField;
