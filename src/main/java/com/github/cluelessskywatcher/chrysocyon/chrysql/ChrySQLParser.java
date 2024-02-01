@@ -3,6 +3,7 @@ package com.github.cluelessskywatcher.chrysocyon.chrysql;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.InsertTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.exceptions.BadSyntaxException;
@@ -10,9 +11,13 @@ import com.github.cluelessskywatcher.chrysocyon.chrysql.exceptions.ParsingExcept
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredExpression;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredTerm;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.QueryPredicate;
+import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.IntegerField;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.VarStringField;
+import com.github.cluelessskywatcher.chrysocyon.tuples.info.IntegerInfo;
+import com.github.cluelessskywatcher.chrysocyon.tuples.info.TupleDataType;
+import com.github.cluelessskywatcher.chrysocyon.tuples.info.VarStringInfo;
 
 public class ChrySQLParser {
     private ChrySQLLexer lexer;
@@ -154,8 +159,48 @@ public class ChrySQLParser {
     }
 
     private ChrySQLStatement parseCreateTable() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'parseCreateTable'");
+        lexer.consumeKeyword("table");
+        String tableName = lexer.consumeIdentifier();
+        lexer.consumeDelimiter('(');
+        TupleSchema schema = fieldDefinitions();
+        lexer.consumeDelimiter(')');
+        lexer.consumeDelimiter(';');
+
+        return new CreateTableStatement(tableName, schema);
+    }
+
+    private TupleSchema fieldDefinitions() {
+        TupleSchema schema = fieldDefinition();
+        if (lexer.matchDelimiter(',')) {
+            lexer.consumeDelimiter(',');
+            schema.addAll(fieldDefinitions());
+        }
+        return schema;
+    }
+
+    private TupleSchema fieldDefinition() {
+        TupleSchema schema = new TupleSchema();
+
+        if (lexer.matchDataType(TupleDataType.INTEGER)) {
+            lexer.consumeDataType(TupleDataType.INTEGER);
+            String fieldName = lexer.consumeIdentifier();
+            schema.addField(new IntegerInfo(), fieldName);
+        }
+        else if (lexer.matchDataType(TupleDataType.VARSTR)) {
+            lexer.consumeDataType(TupleDataType.VARSTR);
+            try {
+                lexer.consumeDelimiter('(');
+                int fieldLength = lexer.consumeInteger();
+                lexer.consumeDelimiter(')');
+                String fieldName = lexer.consumeIdentifier();
+                schema.addField(new VarStringInfo(fieldLength), fieldName);
+            }
+            catch (BadSyntaxException e) {
+                throw new ParsingException("Need to specify varstr length");
+            }
+        }
+
+        return schema;
     }
 
     private List<DataField> valueList() {

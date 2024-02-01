@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 
+import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatementResult;
 import com.github.cluelessskywatcher.chrysocyon.metadata.MetadataManager;
 import com.github.cluelessskywatcher.chrysocyon.planning.GreedyQueryPlanner;
 import com.github.cluelessskywatcher.chrysocyon.planning.OpPlan;
@@ -21,7 +23,7 @@ public class SelectTableStatement implements ChrySQLStatement {
     private @Getter List<String> tableNames;
     private @Getter List<String> selectFields;
     private @Getter QueryPredicate predicate;
-    private @Getter SelectTableResult result;
+    private @Getter ChrySQLStatementResult result;
 
     public SelectTableStatement(List<String> tableNames, List<String> selectFields, QueryPredicate predicate) {
         this.tableNames = tableNames;
@@ -46,7 +48,8 @@ public class SelectTableStatement implements ChrySQLStatement {
     }
 
     @Override
-    public void execute(MetadataManager mtdm, ChrysoTransaction txn) {
+    public void execute(Chrysocyon db, ChrysoTransaction txn) {
+        MetadataManager mtdm = db.getMetadataManager();
         long timeTaken = System.currentTimeMillis();
         QueryPlanner planner = new GreedyQueryPlanner(mtdm);
         OpPlan plan = planner.createPlan(this, txn);

@@ -7,12 +7,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.InsertTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredExpression;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredTerm;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.QueryPredicate;
+import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.IntegerField;
+import com.github.cluelessskywatcher.chrysocyon.tuples.info.DataInfo;
+import com.github.cluelessskywatcher.chrysocyon.tuples.info.TupleDataType;
+import com.github.cluelessskywatcher.chrysocyon.tuples.info.VarStringInfo;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class ChrySQLParserTest {
@@ -35,7 +40,7 @@ public class ChrySQLParserTest {
         Assertions.assertEquals(new QueryPredicate(
             new PredTerm(new PredExpression("field1"), new PredExpression(new IntegerField(25)))
         ), stmt.getPredicate());
-        System.out.println(stmt.toString());
+        Assertions.assertEquals(q2, stmt.toString());
 
         String q3 = "select * from table1, table2 where field1 = 25;";
         parser = new ChrySQLParser(q3);
@@ -46,7 +51,7 @@ public class ChrySQLParserTest {
         Assertions.assertEquals(new QueryPredicate(
             new PredTerm(new PredExpression("field1"), new PredExpression(new IntegerField(25)))
         ), stmt.getPredicate());
-        System.out.println(stmt.toString());
+        Assertions.assertEquals(stmt.toString(), q3);
     }
 
     @Test
@@ -59,7 +64,7 @@ public class ChrySQLParserTest {
         Assertions.assertEquals(List.of("field1", "field2"), stmt.getFieldNames());
         Assertions.assertEquals(List.of(new IntegerField(1), new IntegerField(2)), stmt.getValues());
 
-        System.out.println(stmt.toString());
+        Assertions.assertEquals(stmt.toString(), q1);
     }
 
     @Test
@@ -77,5 +82,15 @@ public class ChrySQLParserTest {
         Assertions.assertEquals("table1", stmt2.getTableName());
         Assertions.assertEquals(List.of("field1", "field2"), stmt2.getFieldNames());
         Assertions.assertEquals(List.of(new IntegerField(1), new IntegerField(2)), stmt2.getValues());
+    
+        String q3 = "create table table1 (int field1, varstr(25) field2);";
+        parser = new ChrySQLParser(q3);
+        CreateTableStatement stmt3 = (CreateTableStatement) parser.parse();
+        Assertions.assertEquals("table1", stmt3.getTableName());
+        Assertions.assertEquals(List.of("field1", "field2"), stmt3.getSchema().getFields());
+        Assertions.assertEquals(TupleDataType.INTEGER, stmt3.getSchema().getType("field1"));
+        Assertions.assertEquals(TupleDataType.VARSTR, stmt3.getSchema().getType("field2"));
+        Assertions.assertEquals(25, ((VarStringInfo) stmt3.getSchema().getField("field2")).getCharSize());
+        Assertions.assertEquals(q3, stmt3.toString());
     }
 }

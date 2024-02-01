@@ -12,4 +12,7 @@ public class IntegerInfo implements DataInfo {
         return TupleDataType.INTEGER;
     }
     
+    public String toString() {
+        return "int";
+    }
 }

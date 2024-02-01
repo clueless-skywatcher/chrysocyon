@@ -19,4 +19,8 @@ public class VarStringInfo implements DataInfo {
     public TupleDataType getDataType() {
         return TupleDataType.VARSTR;
     }
+
+    public String toString() {
+        return String.format("varstr(%d)", charSize);
+    }
 }

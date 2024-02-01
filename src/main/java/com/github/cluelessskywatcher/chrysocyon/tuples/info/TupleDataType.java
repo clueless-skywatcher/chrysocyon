@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TupleDataType {
-    INTEGER(0),
-    VARSTR(1);
+    INTEGER(0, "int"),
+    VARSTR(1, "varstr");
 
     private int code;
+    private String repr;
     private static Map<Integer, TupleDataType> code2Type = new HashMap<>();
 
     static {
@@ -16,8 +17,9 @@ public enum TupleDataType {
         }
     }
 
-    private TupleDataType(int code) {
+    private TupleDataType(int code, String repr) {
         this.code = code;
+        this.repr = repr;
     }
 
     public static TupleDataType getTypeFromCode(int code) {
@@ -26,5 +28,9 @@ public enum TupleDataType {
 
     public int getCode() {
         return this.code;
+    }
+
+    public String toString() {
+        return repr;
     }
 }

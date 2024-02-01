@@ -23,7 +23,7 @@ public class PredTerm {
 
     public boolean isSatisfied(IScan s) {
         DataField lVal = l.evaluateScan(s);
-        DataField rVal = l.evaluateScan(s);
+        DataField rVal = r.evaluateScan(s);
 
         switch (op) {
             case EQUALS:

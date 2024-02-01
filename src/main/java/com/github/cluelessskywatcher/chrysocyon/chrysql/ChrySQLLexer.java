@@ -7,12 +7,16 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.github.cluelessskywatcher.chrysocyon.chrysql.exceptions.BadSyntaxException;
+import com.github.cluelessskywatcher.chrysocyon.tuples.info.TupleDataType;
 
 public class ChrySQLLexer {
     public static final Collection<String> KEYWORDS = Arrays.asList(
         "select", "create", "insert", "from", "where", "and",
-        "into", "values", "delete", "update", "set", "table",
-        "varstr", "int", "view", "index", "as", "on"
+        "into", "values", "delete", "update", "set", "table", "view", "index", "as", "on"
+    );
+
+    public static final Collection<String> DATATYPES = Arrays.asList(
+        "int", "varstr", "long"  
     );
 
     private StreamTokenizer tokenizer;
@@ -39,12 +43,18 @@ public class ChrySQLLexer {
         return d == (char) tokenizer.ttype;
     }
 
+    public boolean matchDataType(TupleDataType dataType) {
+        return tokenizer.ttype == StreamTokenizer.TT_WORD &&
+            DATATYPES.contains(tokenizer.sval) &&
+            tokenizer.sval.equals(dataType.toString());
+    }
+    
     public boolean matchInteger() {
         return tokenizer.ttype == StreamTokenizer.TT_NUMBER;
     }
 
     public boolean matchString() {
-        return (char) tokenizer.ttype == '\'';
+        return (char) tokenizer.ttype == '\"';
     }
 
     public boolean matchKeyword(String w) {
@@ -54,12 +64,20 @@ public class ChrySQLLexer {
 
     public boolean matchIdentifier() {
         return tokenizer.ttype == StreamTokenizer.TT_WORD &&
-            !KEYWORDS.contains(tokenizer.sval);
+            !KEYWORDS.contains(tokenizer.sval) && 
+            !DATATYPES.contains(tokenizer.sval);
     }
 
     public void consumeDelimiter(char d) {
         if (!matchDelimiter(d)) {
             throw new BadSyntaxException("Bad syntax: Delimiter mismatch");
+        }
+        nextToken();
+    }
+
+    public void consumeDataType(TupleDataType dataType) {
+        if (!matchDataType(dataType)) {
+            throw new BadSyntaxException("Bad syntax: Expected Data Type not found");
         }
         nextToken();
     }
