@@ -3,7 +3,7 @@ package com.github.cluelessskywatcher.chrysocyon.planning;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.IScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 
-public interface OpPlan {
+public interface DatabasePlan {
     public IScan open();
     public int blocksAccessed();
     public int recordsOutput();

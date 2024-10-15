@@ -11,12 +11,12 @@ import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 
 import lombok.Getter;
 
-public class CreateTableStatement implements ChrySQLStatement {
+public class CreateNewTableStatement implements ChrySQLStatement {
     private @Getter String tableName;
     private @Getter TupleSchema schema;
     private @Getter ChrySQLStatementResult result;
 
-    public CreateTableStatement(String tableName, TupleSchema schema) {
+    public CreateNewTableStatement(String tableName, TupleSchema schema) {
         this.tableName = tableName;
         this.schema = schema;
     }
@@ -27,7 +27,7 @@ public class CreateTableStatement implements ChrySQLStatement {
         MetadataManager mtdm = db.getMetadataManager();
         mtdm.createTable(tableName, schema, txn);
         timeTaken = System.currentTimeMillis() - timeTaken;
-        this.result = new CreateTableResult(tableName, schema, timeTaken);
+        this.result = new CreateNewTableResult(tableName, schema, timeTaken);
     }
 
     public String toString() {

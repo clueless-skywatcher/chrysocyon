@@ -11,12 +11,12 @@ import com.github.cluelessskywatcher.chrysocyon.tuples.data.VarStringField;
 
 import lombok.Getter;
 
-public class InsertTableResult extends ChrySQLStatementResult {
+public class InsertIntoTableResult extends ChrySQLStatementResult {
     private @Getter String tableName;
     private @Getter List<List<DataField>> rows;
     private @Getter List<String> fields;
     
-    public InsertTableResult(String tableName, long timeTaken) {
+    public InsertIntoTableResult(String tableName, long timeTaken) {
         this.tableName = tableName;
         this.fields = List.of("table_name", "creation_time");
         this.rows = new ArrayList<>();

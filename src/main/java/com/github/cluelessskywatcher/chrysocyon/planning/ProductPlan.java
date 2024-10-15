@@ -4,11 +4,11 @@ import com.github.cluelessskywatcher.chrysocyon.processing.scans.IScan;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.ProductScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 
-public class ProductPlan implements OpPlan {
-    private OpPlan planL, planR;
+public class ProductPlan implements DatabasePlan {
+    private DatabasePlan planL, planR;
     private TupleSchema schema;
 
-    public ProductPlan(OpPlan planL, OpPlan planR) {
+    public ProductPlan(DatabasePlan planL, DatabasePlan planR) {
         this.planL = planL;
         this.planR = planR;
         this.schema = new TupleSchema();

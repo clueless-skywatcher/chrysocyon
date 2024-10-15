@@ -7,6 +7,7 @@ import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.exceptions.ParsingException;
 import com.github.cluelessskywatcher.chrysocyon.metadata.exceptions.TableDoesNotExistException;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
+import com.github.cluelessskywatcher.chrysocyon.tuples.exceptions.IncomparableDataFieldException;
 
 public class ChrysocyonMain {
     public static void main(String[] args) {
@@ -23,11 +24,14 @@ public class ChrysocyonMain {
                 try {
                     ChrySQLParser parser = new ChrySQLParser(query);
                     ChrySQLStatement stmt = parser.parse();
+                    if (stmt == null) {
+                        continue;
+                    }
                     stmt.execute(db, tx);
                     System.out.println(stmt.getResult().toString());
                 } catch (ParsingException e) {
                     System.out.println("Bad syntax: " + e.getMessage());
-                } catch (TableDoesNotExistException e) {
+                } catch (TableDoesNotExistException | IncomparableDataFieldException e) {
                     System.out.println(e.getMessage());
                 } finally {
                     System.out.print(">> ");
@@ -36,10 +40,10 @@ public class ChrysocyonMain {
         }
 
         scanner.close();
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                db.nonStaticFactoryReset();
-            }
-        });
+        // Runtime.getRuntime().addShutdownHook(new Thread() {
+        //     public void run() {
+        //         db.nonStaticFactoryReset();
+        //     }
+        // });
     }
 }

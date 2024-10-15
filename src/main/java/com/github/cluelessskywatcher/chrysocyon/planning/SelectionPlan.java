@@ -5,11 +5,11 @@ import com.github.cluelessskywatcher.chrysocyon.processing.scans.IScan;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.SelectionScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 
-public class SelectionPlan implements OpPlan {
-    private OpPlan plan;
+public class SelectionPlan implements DatabasePlan {
+    private DatabasePlan plan;
     private QueryPredicate pred;
 
-    public SelectionPlan(OpPlan plan, QueryPredicate p) {
+    public SelectionPlan(DatabasePlan plan, QueryPredicate p) {
         this.plan = plan;
         this.pred = p;
     }

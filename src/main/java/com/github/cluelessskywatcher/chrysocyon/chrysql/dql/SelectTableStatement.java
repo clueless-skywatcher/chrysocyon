@@ -9,7 +9,7 @@ import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatementResult;
 import com.github.cluelessskywatcher.chrysocyon.metadata.MetadataManager;
 import com.github.cluelessskywatcher.chrysocyon.planning.GreedyQueryPlanner;
-import com.github.cluelessskywatcher.chrysocyon.planning.OpPlan;
+import com.github.cluelessskywatcher.chrysocyon.planning.DatabasePlan;
 import com.github.cluelessskywatcher.chrysocyon.planning.QueryPlanner;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.QueryPredicate;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.ProjectionScan;
@@ -43,7 +43,13 @@ public class SelectTableStatement implements ChrySQLStatement {
             tableNamesJoiner.add(table);
         }
 
-        return String.format("select %s from %s where %s;", selFieldStr, tableNamesJoiner.toString(), predicate.toString());
+        String result = String.format("select %s from %s", selFieldStr, tableNamesJoiner.toString());
+        
+        if (!predicate.isEmpty()) {
+            result = String.format("%s where %s", result, predicate.toString());
+        }
+        
+        return result + ";";
     }
 
     @Override
@@ -51,7 +57,7 @@ public class SelectTableStatement implements ChrySQLStatement {
         MetadataManager mtdm = db.getMetadataManager();
         long timeTaken = System.currentTimeMillis();
         QueryPlanner planner = new GreedyQueryPlanner(mtdm);
-        OpPlan plan = planner.createPlan(this, txn);
+        DatabasePlan plan = planner.createPlan(this, txn);
         ProjectionScan s = (ProjectionScan) plan.open();
         List<String> fields = s.getFields();
         List<List<DataField>> rows = new ArrayList<>();

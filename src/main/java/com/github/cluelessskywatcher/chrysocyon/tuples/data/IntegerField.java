@@ -1,6 +1,8 @@
 package com.github.cluelessskywatcher.chrysocyon.tuples.data;
 
-public class IntegerField implements DataField, Comparable<IntegerField>  {
+import com.github.cluelessskywatcher.chrysocyon.tuples.exceptions.IncomparableDataFieldException;
+
+public class IntegerField implements DataField  {
     private int value;
 
     public IntegerField(int value) {
@@ -27,8 +29,11 @@ public class IntegerField implements DataField, Comparable<IntegerField>  {
     }
 
     @Override
-    public int compareTo(IntegerField o) {
-        return Integer.compare((int) this.getValue(), (int) o.getValue());
+    public int compareTo(DataField o) {
+        if (o instanceof IntegerField) {
+            return Integer.compare((int) this.getValue(), (int) o.getValue());
+        }
+        throw new IncomparableDataFieldException(String.format("Cannot compare %s to %s", toString(), o.toString()));
     }
 
     public int hashCode() {

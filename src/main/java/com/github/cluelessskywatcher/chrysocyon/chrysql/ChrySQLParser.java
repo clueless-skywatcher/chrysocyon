@@ -3,13 +3,16 @@ package com.github.cluelessskywatcher.chrysocyon.chrysql;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateTableStatement;
-import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.InsertTableStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewIndexStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewTableStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewViewStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.InsertIntoTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.exceptions.BadSyntaxException;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.exceptions.ParsingException;
-import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredExpression;
-import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredTerm;
+import com.github.cluelessskywatcher.chrysocyon.processing.expressions.ExpressionOperator;
+import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredicateExpression;
+import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredicateTerm;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.QueryPredicate;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
@@ -40,20 +43,38 @@ public class ChrySQLParser {
         throw new ParsingException("Cannot parse constant");
     }
 
-    public PredExpression expression() {
+    public PredicateExpression expression() {
         if (lexer.matchIdentifier()) {
-            return new PredExpression(field());
+            return new PredicateExpression(field());
         }
         else {
-            return new PredExpression(constant());
+            return new PredicateExpression(constant());
         }
     }
 
-    public PredTerm term() {
-        PredExpression lhs = expression();
-        lexer.consumeDelimiter('=');
-        PredExpression rhs = expression();
-        return new PredTerm(lhs, rhs);
+    public PredicateTerm term() {
+        PredicateExpression lhs = expression();
+        ExpressionOperator op;
+        if (lexer.matchDelimiter('>')) {
+            op = ExpressionOperator.GT;
+            lexer.consumeDelimiter('>');
+        } else if (lexer.matchDelimiter('<')) {
+            op = ExpressionOperator.LT;
+            lexer.consumeDelimiter('<');
+        } else if (lexer.matchDelimiter('!')) {
+            lexer.consumeDelimiter('!');
+            if (lexer.matchDelimiter('=')) {
+                op = ExpressionOperator.NOT_EQUALS;
+                lexer.consumeDelimiter('=');
+            } else {
+                throw new ParsingException("Bad symbol detected");
+            }
+        } else {
+            lexer.consumeDelimiter('=');
+            op = ExpressionOperator.EQUALS;
+        }
+        PredicateExpression rhs = expression();
+        return new PredicateTerm(lhs, rhs, op);
     }
 
     public QueryPredicate predicate() {
@@ -127,14 +148,20 @@ public class ChrySQLParser {
             return parseCreate();
         }
         else if (lexer.matchKeyword("update")) {
-            return parseCreate();
+            return parseUpdate();
         }
-        else
+        else if (lexer.matchKeyword("delete")) {
             return parseDelete();
+        }
+        return null;
     }
 
     private ChrySQLStatement parseDelete() {
         throw new UnsupportedOperationException("Unimplemented method 'parseDelete'");
+    }
+
+    private ChrySQLStatement parseUpdate() {
+        throw new UnsupportedOperationException("Unimplemented method 'parseUpdate'");
     }
 
     private ChrySQLStatement parseCreate() {
@@ -150,12 +177,22 @@ public class ChrySQLParser {
     }
 
     private ChrySQLStatement parseCreateIndex() {
-        throw new UnsupportedOperationException("Unimplemented method 'parseCreateIndex'");
+        lexer.consumeKeyword("index");
+        String indexName = lexer.consumeIdentifier();
+        lexer.consumeKeyword("on");
+        String tableName = lexer.consumeIdentifier();
+        lexer.consumeDelimiter('(');
+        String fieldName = lexer.consumeIdentifier();
+        lexer.consumeDelimiter(')');
+        return new CreateNewIndexStatement(indexName, tableName, fieldName);
     }
 
     private ChrySQLStatement parseCreateView() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'parseCreateView'");
+        lexer.consumeKeyword("view");
+        String viewName = lexer.consumeIdentifier();
+        lexer.consumeKeyword("as");
+        ChrySQLStatement query = parseSelect();
+        return new CreateNewViewStatement(viewName, query);
     }
 
     private ChrySQLStatement parseCreateTable() {
@@ -166,7 +203,7 @@ public class ChrySQLParser {
         lexer.consumeDelimiter(')');
         lexer.consumeDelimiter(';');
 
-        return new CreateTableStatement(tableName, schema);
+        return new CreateNewTableStatement(tableName, schema);
     }
 
     private TupleSchema fieldDefinitions() {
@@ -227,6 +264,6 @@ public class ChrySQLParser {
         lexer.consumeDelimiter(')');
         lexer.consumeDelimiter(';');
 
-        return new InsertTableStatement(tableName, fieldList, values);
+        return new InsertIntoTableStatement(tableName, fieldList, values);
     }
 }

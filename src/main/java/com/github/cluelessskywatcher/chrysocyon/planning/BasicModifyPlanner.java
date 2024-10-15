@@ -1,7 +1,9 @@
 package com.github.cluelessskywatcher.chrysocyon.planning;
 
-import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateTableStatement;
-import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.InsertTableStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewIndexStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewTableStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewViewStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.InsertIntoTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.metadata.MetadataManager;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.UpdatableScan;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
@@ -17,15 +19,15 @@ public class BasicModifyPlanner implements ModifyPlanner {
     }
 
     @Override
-    public int executeCreateTable(CreateTableStatement stmt, ChrysoTransaction txn) {
+    public int executeCreateTable(CreateNewTableStatement stmt, ChrysoTransaction txn) {
         mtdm.createTable(stmt.getTableName(), stmt.getSchema(), txn);
         return 0;
     }
 
     @Override
-    public int executeInsert(InsertTableStatement stmt, ChrysoTransaction txn) {
+    public int executeInsert(InsertIntoTableStatement stmt, ChrysoTransaction txn) {
         // TODO Auto-generated method stub
-        OpPlan plan = new TablePlan(stmt.getTableName(), mtdm, txn);
+        DatabasePlan plan = new TablePlan(stmt.getTableName(), mtdm, txn);
         UpdatableScan scan = (UpdatableScan) plan.open();
         scan.insert();
         Iterator<DataField> iterator = stmt.getValues().iterator();
@@ -39,5 +41,15 @@ public class BasicModifyPlanner implements ModifyPlanner {
         return 1;
     }
 
-    
+    @Override
+    public int executeCreateIndex(CreateNewIndexStatement stmt, ChrysoTransaction txn) {
+        mtdm.createIndex(stmt.getIndexName(), stmt.getTableName(), stmt.getFieldName(), txn);
+        return 1;
+    }
+
+    @Override
+    public int executeCreateView(CreateNewViewStatement stmt, ChrysoTransaction txn) {
+        mtdm.createView(stmt.getViewName(), stmt.getQuery().toString(), txn);
+        return 1;
+    }
 }

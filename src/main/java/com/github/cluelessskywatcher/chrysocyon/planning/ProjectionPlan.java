@@ -6,11 +6,11 @@ import com.github.cluelessskywatcher.chrysocyon.processing.scans.IScan;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.ProjectionScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 
-public class ProjectionPlan implements OpPlan {
-    private OpPlan plan;
+public class ProjectionPlan implements DatabasePlan {
+    private DatabasePlan plan;
     private TupleSchema schema;
 
-    public ProjectionPlan(OpPlan plan, List<String> fields) {
+    public ProjectionPlan(DatabasePlan plan, List<String> fields) {
         this.plan = plan;
         TupleSchema newSchema = new TupleSchema();
         if (fields.size() == 0) {

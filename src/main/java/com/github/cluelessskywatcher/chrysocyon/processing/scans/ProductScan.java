@@ -9,11 +9,13 @@ public class ProductScan implements IScan {
     public ProductScan(IScan l, IScan r) {
         this.leftScan = l;
         this.rightScan = r;
+        leftScan.next();
     }
 
     @Override
     public void moveToBeginning() {
         leftScan.moveToBeginning();
+        leftScan.next();
         rightScan.moveToBeginning();
     }
 

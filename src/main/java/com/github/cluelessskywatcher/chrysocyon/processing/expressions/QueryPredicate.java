@@ -4,17 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
 
-import com.github.cluelessskywatcher.chrysocyon.planning.OpPlan;
+import com.github.cluelessskywatcher.chrysocyon.planning.DatabasePlan;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.IScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
 
 public class QueryPredicate {
-    private List<PredTerm> terms = new ArrayList<>();
+    private List<PredicateTerm> terms = new ArrayList<>();
 
     public QueryPredicate() {}
 
-    public QueryPredicate(PredTerm t) {
+    public QueryPredicate(PredicateTerm t) {
         terms.add(t);
     }
 
@@ -23,7 +23,7 @@ public class QueryPredicate {
     }
 
     public boolean isSatisfied(IScan s) {
-        for (PredTerm t : terms) {
+        for (PredicateTerm t : terms) {
             if (!t.isSatisfied(s)) {
                 return false;
             }
@@ -35,7 +35,7 @@ public class QueryPredicate {
     public QueryPredicate selectSubPredicate(TupleSchema schema) {
         QueryPredicate result = new QueryPredicate();
 
-        for (PredTerm t : terms) {
+        for (PredicateTerm t : terms) {
             if (t.appliesTo(schema)) {
                 result.terms.add(t);
             }
@@ -54,7 +54,7 @@ public class QueryPredicate {
         newSchema.addAll(schema1);
         newSchema.addAll(schema2);
 
-        for (PredTerm t : terms) {
+        for (PredicateTerm t : terms) {
             if (!t.appliesTo(schema1) && !t.appliesTo(schema2) && t.appliesTo(newSchema)) {
                 result.terms.add(t);
             }
@@ -67,7 +67,7 @@ public class QueryPredicate {
     }
 
     public DataField equatesWithConstant(String fieldName) {
-        for (PredTerm t : terms) {
+        for (PredicateTerm t : terms) {
             DataField field = t.equatesWithConstant(fieldName);
             if (field != null) return field;
         }
@@ -76,7 +76,7 @@ public class QueryPredicate {
     }
 
     public String equatesWithField(String fieldName) {
-        for (PredTerm t : terms) {
+        for (PredicateTerm t : terms) {
             String s = t.equatesWithField(fieldName);
             if (s != null) return s;
         }
@@ -85,7 +85,7 @@ public class QueryPredicate {
     }
 
     public String toString() {
-        Iterator<PredTerm> termIterator = terms.iterator();
+        Iterator<PredicateTerm> termIterator = terms.iterator();
 
         if (!termIterator.hasNext()) return "";
         StringBuffer result = new StringBuffer(termIterator.next().toString());
@@ -103,11 +103,15 @@ public class QueryPredicate {
         return false;
     }
 
-    public int reductionFactor(OpPlan plan) {
+    public int reductionFactor(DatabasePlan plan) {
         int rf = 1;
-        for (PredTerm term : terms) {
+        for (PredicateTerm term : terms) {
             rf *= term.reductionFactor(plan);
         }
         return rf;
+    }
+
+    public boolean isEmpty() {
+        return terms.size() == 0;
     }
 }

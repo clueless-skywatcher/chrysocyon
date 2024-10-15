@@ -6,21 +6,19 @@ import java.util.StringJoiner;
 import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatementResult;
-import com.github.cluelessskywatcher.chrysocyon.metadata.MetadataManager;
-import com.github.cluelessskywatcher.chrysocyon.planning.BasicModifyPlanner;
 import com.github.cluelessskywatcher.chrysocyon.planning.ModifyPlanner;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
 
 import lombok.Getter;
 
-public class InsertTableStatement implements ChrySQLStatement {
+public class InsertIntoTableStatement implements ChrySQLStatement {
     private @Getter String tableName;
     private @Getter List<String> fieldNames;
     private @Getter List<DataField> values;
     private @Getter ChrySQLStatementResult result;
 
-    public InsertTableStatement(String tableName, List<String> fieldNames, List<DataField> values) {
+    public InsertIntoTableStatement(String tableName, List<String> fieldNames, List<DataField> values) {
         this.tableName = tableName;
         this.fieldNames = fieldNames;
         this.values = values;
@@ -47,13 +45,12 @@ public class InsertTableStatement implements ChrySQLStatement {
 
     @Override
     public void execute(Chrysocyon db, ChrysoTransaction txn) {
-        MetadataManager mtdm = db.getMetadataManager();
-        ModifyPlanner planner = new BasicModifyPlanner(mtdm);
+        ModifyPlanner planner = db.getPlanner().getModifyPlanner();
         long timeTaken = System.currentTimeMillis();
         int result = planner.executeInsert(this, txn);
         timeTaken = System.currentTimeMillis() - timeTaken;
         if (result == 1) {
-            this.result = new InsertTableResult(tableName, timeTaken);        
+            this.result = new InsertIntoTableResult(tableName, timeTaken);        
         }
     }
 }

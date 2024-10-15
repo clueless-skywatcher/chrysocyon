@@ -20,8 +20,8 @@ public class GreedyQueryPlanner implements QueryPlanner {
     }
 
     @Override
-    public OpPlan createPlan(SelectTableStatement stmt, ChrysoTransaction txn) {
-        List<OpPlan> plans = new ArrayList<>();
+    public DatabasePlan createPlan(SelectTableStatement stmt, ChrysoTransaction txn) {
+        List<DatabasePlan> plans = new ArrayList<>();
         for (String tableName : stmt.getTableNames()) {
             String viewDef = mtdm.getViewDefinition(tableName, txn);
             if (viewDef != null) {
@@ -34,11 +34,11 @@ public class GreedyQueryPlanner implements QueryPlanner {
             }
         }
 
-        OpPlan plan = plans.remove(0);
-        for (OpPlan otherPlan : plans) {
-            OpPlan plan1 = new ProductPlan(plan, otherPlan);
-            OpPlan plan2 = new ProductPlan(otherPlan, plan);
-            plan = (plan1.blocksAccessed() < plan2.blocksAccessed()) ? plan1 : plan2;
+        DatabasePlan plan = plans.remove(0);
+        for (DatabasePlan otherPlan : plans) {
+            DatabasePlan plan1 = new ProductPlan(plan, otherPlan);
+            DatabasePlan plan2 = new ProductPlan(otherPlan, plan);
+            plan = (plan1.blocksAccessed() <= plan2.blocksAccessed()) ? plan1 : plan2;
         }
 
         plan = new SelectionPlan(plan, stmt.getPredicate());

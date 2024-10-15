@@ -35,6 +35,9 @@ public class FieldCatalogTable extends AbstractMetaTable {
     public void insertData(ChrysoTransaction txn, AbstractMetaTableParameters params) {
         TableScan scan = new TableScan(txn, tableName, layout);
         FieldCatalogParameters fcParams = (FieldCatalogParameters) params;
+        if (fcParams.getTableName().equals("table1")) {
+            System.out.println("");
+        }
         scan.insert();
         scan.setData("table_name", new VarStringField(fcParams.getTableName(), MAX_TABLE_NAME_SIZE));
         scan.setData("field_name", new VarStringField(fcParams.getFieldName(), MAX_FIELD_NAME_SIZE));

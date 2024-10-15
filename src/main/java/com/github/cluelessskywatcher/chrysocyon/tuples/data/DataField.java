@@ -1,6 +1,6 @@
 package com.github.cluelessskywatcher.chrysocyon.tuples.data;
 
-public interface DataField {
+public interface DataField extends Comparable<DataField> {
     public Object getValue();
 
     public int getSize();

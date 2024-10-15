@@ -2,6 +2,7 @@ package com.github.cluelessskywatcher.chrysocyon.processing.scans;
 
 import java.util.List;
 
+import com.github.cluelessskywatcher.chrysocyon.metadata.exceptions.FieldDoesNotExistException;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
 
 import lombok.Getter;
@@ -31,7 +32,7 @@ public class ProjectionScan implements IScan {
             return scan.getData(fieldName);
         }
         else {
-            throw new RuntimeException(String.format("Field %s not found", fieldName));
+            throw new FieldDoesNotExistException(String.format("Field %s not found", fieldName));
         }
     }
 

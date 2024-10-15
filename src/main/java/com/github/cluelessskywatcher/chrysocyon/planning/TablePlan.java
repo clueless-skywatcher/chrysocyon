@@ -8,7 +8,7 @@ import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 
-public class TablePlan implements OpPlan {
+public class TablePlan implements DatabasePlan {
     private ChrysoTransaction txn;
     private String tableName;
     private TupleLayout layout;

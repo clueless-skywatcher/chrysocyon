@@ -1,10 +1,11 @@
 package com.github.cluelessskywatcher.chrysocyon.tuples.data;
 
 import com.github.cluelessskywatcher.chrysocyon.filesystem.PageObject;
+import com.github.cluelessskywatcher.chrysocyon.tuples.exceptions.IncomparableDataFieldException;
 
 import lombok.Getter;
 
-public class VarStringField implements DataField, Comparable<VarStringField> {
+public class VarStringField implements DataField {
     private String value;
     private @Getter int maxSize;
 
@@ -33,8 +34,11 @@ public class VarStringField implements DataField, Comparable<VarStringField> {
     }
 
     @Override
-    public int compareTo(VarStringField o) {
-        return ((String) getValue()).compareTo((String) o.getValue());
+    public int compareTo(DataField o) {
+        if (o instanceof VarStringField) {
+            return Integer.compare((int) this.getValue(), (int) o.getValue());
+        }
+        throw new IncomparableDataFieldException(String.format("Cannot compare %s to %s", toString(), o.toString()));
     }
 
     public int hashCode() {

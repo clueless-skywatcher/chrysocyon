@@ -4,12 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ExpressionOperator {
-    EQUALS("=");
+    EQUALS("="),
+    GT(">"),
+    LT("<"),
+    NOT_EQUALS("!=");
 
     private static Map<String, ExpressionOperator> opLookup = new HashMap<>();
 
     static {
         opLookup.put("=", EQUALS);
+        opLookup.put(">", GT);
+        opLookup.put("<", LT);
+        opLookup.put("!=", NOT_EQUALS);
     }
 
     private String op;

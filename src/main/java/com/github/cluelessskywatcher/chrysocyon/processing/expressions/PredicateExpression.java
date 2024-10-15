@@ -4,15 +4,15 @@ import com.github.cluelessskywatcher.chrysocyon.processing.scans.IScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
 
-public class PredExpression {
+public class PredicateExpression {
     private DataField value = null;
     private String fieldName = null;
 
-    public PredExpression(DataField value) {
+    public PredicateExpression(DataField value) {
         this.value = value;
     }
 
-    public PredExpression(String fieldName) {
+    public PredicateExpression(String fieldName) {
         this.fieldName = fieldName;
     }
 
@@ -41,8 +41,8 @@ public class PredExpression {
     }
 
     public boolean equals(Object o) {
-        if (o instanceof PredExpression) {
-            PredExpression other = (PredExpression) o;
+        if (o instanceof PredicateExpression) {
+            PredicateExpression other = (PredicateExpression) o;
             return (value != null) ? value.equals(other.value) : fieldName.equals(other.fieldName);
         }
         return false;

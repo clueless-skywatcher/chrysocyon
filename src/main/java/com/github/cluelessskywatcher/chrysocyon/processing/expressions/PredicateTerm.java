@@ -1,22 +1,22 @@
 package com.github.cluelessskywatcher.chrysocyon.processing.expressions;
 
-import com.github.cluelessskywatcher.chrysocyon.planning.OpPlan;
+import com.github.cluelessskywatcher.chrysocyon.planning.DatabasePlan;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.IScan;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleSchema;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
 
-public class PredTerm {
-    private PredExpression l;
-    private PredExpression r;
+public class PredicateTerm {
+    private PredicateExpression l;
+    private PredicateExpression r;
     private ExpressionOperator op;
     
-    public PredTerm(PredExpression l, PredExpression r) {
+    public PredicateTerm(PredicateExpression l, PredicateExpression r) {
         this.l = l;
         this.r = r;
         this.op = ExpressionOperator.EQUALS;
     }
 
-    public PredTerm(PredExpression l, PredExpression r, ExpressionOperator op) {
+    public PredicateTerm(PredicateExpression l, PredicateExpression r, ExpressionOperator op) {
         this(l, r);
         this.op = op;
     }
@@ -28,6 +28,12 @@ public class PredTerm {
         switch (op) {
             case EQUALS:
                 return lVal.equals(rVal);
+            case NOT_EQUALS:
+                return !lVal.equals(rVal);
+            case GT:
+                return lVal.compareTo(rVal) == 1;
+            case LT:
+                return lVal.compareTo(rVal) == -1;
             default:
                 return false;
         }
@@ -60,14 +66,14 @@ public class PredTerm {
     }
 
     public boolean equals(Object o) {
-        if (o instanceof PredTerm) {
-            PredTerm other = (PredTerm) o;
+        if (o instanceof PredicateTerm) {
+            PredicateTerm other = (PredicateTerm) o;
             return l.equals(other.l) && r.equals(other.r) && op.equals(other.op);
         }
         return false;
     }
 
-    public int reductionFactor(OpPlan p) {
+    public int reductionFactor(DatabasePlan p) {
         String lhsName, rhsName;
         if (l.isFieldName() && r.isFieldName()) {
             lhsName = l.asFieldName();

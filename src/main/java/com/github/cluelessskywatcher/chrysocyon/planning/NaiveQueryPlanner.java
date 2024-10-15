@@ -16,8 +16,8 @@ public class NaiveQueryPlanner implements QueryPlanner {
     }
 
     @Override
-    public OpPlan createPlan(SelectTableStatement stmt, ChrysoTransaction txn) {
-        List<OpPlan> plans = new ArrayList<>();
+    public DatabasePlan createPlan(SelectTableStatement stmt, ChrysoTransaction txn) {
+        List<DatabasePlan> plans = new ArrayList<>();
         for (String tableName : stmt.getTableNames()) {
             String viewDef = mtdm.getViewDefinition(tableName, txn);
             if (viewDef != null) {
@@ -30,8 +30,8 @@ public class NaiveQueryPlanner implements QueryPlanner {
             }
         }
 
-        OpPlan plan = plans.remove(0);
-        for (OpPlan otherPlan : plans) {
+        DatabasePlan plan = plans.remove(0);
+        for (DatabasePlan otherPlan : plans) {
             plan = new ProductPlan(plan, otherPlan);
         }
 
