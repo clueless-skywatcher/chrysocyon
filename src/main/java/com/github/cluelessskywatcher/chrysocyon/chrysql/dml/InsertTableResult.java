@@ -28,4 +28,8 @@ public class InsertTableResult extends ChrySQLStatementResult {
             )
         );
     }
+
+    public String toString() {
+        return String.format("INSERT INTO %s. Time taken: %d ms", tableName, timeTaken);
+    }
 }

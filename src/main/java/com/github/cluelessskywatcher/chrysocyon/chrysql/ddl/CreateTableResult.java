@@ -29,4 +29,8 @@ public class CreateTableResult extends ChrySQLStatementResult {
             )
         );
     }
+
+    public String toString() {
+        return String.format("CREATE TABLE %s. Time taken: %d ms", tableName, timeTaken);
+    }
 }

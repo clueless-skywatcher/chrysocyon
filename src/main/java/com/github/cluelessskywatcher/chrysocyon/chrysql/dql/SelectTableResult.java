@@ -35,6 +35,6 @@ public class SelectTableResult extends ChrySQLStatementResult {
             }
             endResult.add(rowStr.toString());
         }
-        return endResult.toString();
+        return String.format("%s\n\nTime taken: %d ms", endResult.toString(), timeTaken);
     }
 }
