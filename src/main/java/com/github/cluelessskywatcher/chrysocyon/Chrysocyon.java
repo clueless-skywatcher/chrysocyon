@@ -8,7 +8,7 @@ import com.github.cluelessskywatcher.chrysocyon.filesystem.ChrysoFileManager;
 import com.github.cluelessskywatcher.chrysocyon.metadata.MetadataManager;
 import com.github.cluelessskywatcher.chrysocyon.planning.BasicModifyPlanner;
 import com.github.cluelessskywatcher.chrysocyon.planning.ChrySQLPlanner;
-import com.github.cluelessskywatcher.chrysocyon.planning.GreedyQueryPlanner;
+import com.github.cluelessskywatcher.chrysocyon.planning.GreedyProductQueryPlanner;
 import com.github.cluelessskywatcher.chrysocyon.planning.ModifyPlanner;
 import com.github.cluelessskywatcher.chrysocyon.planning.QueryPlanner;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
@@ -42,7 +42,7 @@ public class Chrysocyon {
         ChrysoTransaction transaction = newTransaction();
         this.metadataManager = new MetadataManager(isNew, transaction);
 
-        QueryPlanner queryPlanner = new GreedyQueryPlanner(metadataManager);
+        QueryPlanner queryPlanner = new GreedyProductQueryPlanner(metadataManager);
         ModifyPlanner modifyPlanner = new BasicModifyPlanner(metadataManager);
 
         this.planner = new ChrySQLPlanner(queryPlanner, modifyPlanner);

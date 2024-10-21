@@ -12,10 +12,10 @@ import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
  * Generate a greedy query planner that minimizes the cost
  * at each product step
  */
-public class GreedyQueryPlanner implements QueryPlanner {
+public class GreedyProductQueryPlanner implements QueryPlanner {
     private MetadataManager mtdm;
 
-    public GreedyQueryPlanner(MetadataManager mtdm) {
+    public GreedyProductQueryPlanner(MetadataManager mtdm) {
         this.mtdm = mtdm;
     }
 
@@ -40,8 +40,6 @@ public class GreedyQueryPlanner implements QueryPlanner {
             DatabasePlan plan2 = new ProductPlan(otherPlan, plan);
             plan = (plan1.blocksAccessed() <= plan2.blocksAccessed()) ? plan1 : plan2;
         }
-
-        plan = new SelectionPlan(plan, stmt.getPredicate());
 
         return new ProjectionPlan(plan, stmt.getSelectFields());
     }

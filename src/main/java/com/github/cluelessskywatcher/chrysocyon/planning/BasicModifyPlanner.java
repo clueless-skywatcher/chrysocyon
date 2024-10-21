@@ -26,7 +26,6 @@ public class BasicModifyPlanner implements ModifyPlanner {
 
     @Override
     public int executeInsert(InsertIntoTableStatement stmt, ChrysoTransaction txn) {
-        // TODO Auto-generated method stub
         DatabasePlan plan = new TablePlan(stmt.getTableName(), mtdm, txn);
         UpdatableScan scan = (UpdatableScan) plan.open();
         scan.insert();

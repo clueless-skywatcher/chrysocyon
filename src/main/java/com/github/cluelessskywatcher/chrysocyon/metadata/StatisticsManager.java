@@ -50,9 +50,6 @@ public class StatisticsManager {
         int numBlocksAccessed = 0;
 
         TableScan tScan = new TableScan(tx, tableName, layout);
-        if (tableName.equals("table1")) {
-            System.out.println();
-        }
         while (tScan.next()) {
             numRecords++;
             numBlocksAccessed = tScan.currentTupleId().getBlock() + 1;

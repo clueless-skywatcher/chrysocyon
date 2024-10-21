@@ -18,7 +18,9 @@ public class ChrysocyonMain {
         System.out.print(">> ");
         while (scanner.hasNextLine()) {
             String query = scanner.nextLine();
+            // Quit, committing the current transaction
             if (query.equals("!q")) {
+                tx.commit();
                 break;
             } else {
                 try {
@@ -40,10 +42,5 @@ public class ChrysocyonMain {
         }
 
         scanner.close();
-        // Runtime.getRuntime().addShutdownHook(new Thread() {
-        //     public void run() {
-        //         db.nonStaticFactoryReset();
-        //     }
-        // });
     }
 }

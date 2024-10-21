@@ -1,5 +1,6 @@
 package com.github.cluelessskywatcher.chrysocyon.metadata;
 
+import com.github.cluelessskywatcher.chrysocyon.index.HashedIndex;
 import com.github.cluelessskywatcher.chrysocyon.index.TableIndex;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 import com.github.cluelessskywatcher.chrysocyon.tuples.TupleLayout;
@@ -8,12 +9,13 @@ import com.github.cluelessskywatcher.chrysocyon.tuples.info.DataInfo;
 import com.github.cluelessskywatcher.chrysocyon.tuples.info.IntegerInfo;
 import lombok.Getter;
 
+@SuppressWarnings("unused")
 public class IndexInfo {
     private @Getter String indexName, fieldName;
-    private ChrysoTransaction tx;
-    private TupleSchema schema;
-    private TupleLayout layout;
-    private StatisticalInfo stats;
+    private @Getter ChrysoTransaction tx;
+    private @Getter TupleSchema schema;
+    private @Getter TupleLayout layout;
+    private @Getter StatisticalInfo stats;
 
     public IndexInfo(String indexName, String fieldName, ChrysoTransaction tx, TupleSchema schema, TupleLayout layout,
             StatisticalInfo stats) {
@@ -26,11 +28,14 @@ public class IndexInfo {
     }
 
     public TableIndex open() {
-        return null;
+        TupleSchema schema = getSchema();
+        return new HashedIndex(tx, indexName, layout);
     }
 
     public int getBlocksAccessed() {
-        return 0;
+        int recordsPerBlock = tx.getBlockSize() / layout.getSlotSize();
+        int blockCount = stats.getNumRecords() / stats.getDistinctValues(fieldName);
+        return HashedIndex.searchCost(blockCount, recordsPerBlock);
     }
 
     public int getRecordCount() {

@@ -8,8 +8,8 @@ import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatementResult;
 import com.github.cluelessskywatcher.chrysocyon.metadata.MetadataManager;
-import com.github.cluelessskywatcher.chrysocyon.planning.GreedyQueryPlanner;
 import com.github.cluelessskywatcher.chrysocyon.planning.DatabasePlan;
+import com.github.cluelessskywatcher.chrysocyon.planning.GreedyProductQueryPlanner;
 import com.github.cluelessskywatcher.chrysocyon.planning.QueryPlanner;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.QueryPredicate;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.ProjectionScan;
@@ -56,7 +56,7 @@ public class SelectTableStatement implements ChrySQLStatement {
     public void execute(Chrysocyon db, ChrysoTransaction txn) {
         MetadataManager mtdm = db.getMetadataManager();
         long timeTaken = System.currentTimeMillis();
-        QueryPlanner planner = new GreedyQueryPlanner(mtdm);
+        QueryPlanner planner = new GreedyProductQueryPlanner(mtdm);
         DatabasePlan plan = planner.createPlan(this, txn);
         ProjectionScan s = (ProjectionScan) plan.open();
         List<String> fields = s.getFields();
