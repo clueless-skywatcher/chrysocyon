@@ -3,7 +3,9 @@ package com.github.cluelessskywatcher.chrysocyon.planning;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewIndexStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewViewStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.DeleteFromTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.InsertIntoTableStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.UpdateTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.metadata.MetadataManager;
 import com.github.cluelessskywatcher.chrysocyon.processing.scans.UpdatableScan;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
@@ -50,5 +52,38 @@ public class BasicModifyPlanner implements ModifyPlanner {
     public int executeCreateView(CreateNewViewStatement stmt, ChrysoTransaction txn) {
         mtdm.createView(stmt.getViewName(), stmt.getQuery().toString(), txn);
         return 1;
+    }
+
+    @Override
+    public int executeUpdate(UpdateTableStatement stmt, ChrysoTransaction txn) {
+        DatabasePlan p = new TablePlan(stmt.getTableName(), mtdm, txn);
+        p = new SelectionPlan(p, stmt.getPredicate());
+        UpdatableScan s = (UpdatableScan) p.open();
+        
+        int count = 0;
+
+        while (s.next()) {
+            DataField value = stmt.getNewValue().evaluateScan(s);
+            s.setData(stmt.getFieldName(), value);
+            count++;
+        }
+
+        return count;
+    }
+
+    @Override
+    public int executeDelete(DeleteFromTableStatement stmt, ChrysoTransaction txn) {
+        DatabasePlan p = new TablePlan(stmt.getTableName(), mtdm, txn);
+        p = new SelectionPlan(p, stmt.getPredicate());
+        UpdatableScan s = (UpdatableScan) p.open();
+
+        int count = 0;
+
+        while (s.next()) {
+            s.delete();
+            count++;
+        }
+
+        return count;
     }
 }

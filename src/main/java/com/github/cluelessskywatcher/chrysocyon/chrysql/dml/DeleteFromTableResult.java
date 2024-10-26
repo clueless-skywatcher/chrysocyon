@@ -7,16 +7,19 @@ import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
 
 import lombok.Getter;
 
-public class InsertIntoTableResult extends ChrySQLStatementResult {
+public class DeleteFromTableResult extends ChrySQLStatementResult {
     private @Getter String tableName;
     private @Getter List<List<DataField>> rows;
+    private @Getter List<String> fields;
+    private @Getter int rowsAffected;
     
-    public InsertIntoTableResult(String tableName, long timeTaken) {
+    public DeleteFromTableResult(String tableName, long timeTaken, int rowsAffected) {
         this.tableName = tableName;
+        this.rowsAffected = rowsAffected;
         this.timeTaken = timeTaken;
     }
 
     public String toString() {
-        return String.format("INSERT INTO %s. Time taken: %d ms", tableName, timeTaken);
+        return String.format("DELETE FROM %s: %d rows affected. Time Taken: %d", tableName, rowsAffected, timeTaken);
     }
 }

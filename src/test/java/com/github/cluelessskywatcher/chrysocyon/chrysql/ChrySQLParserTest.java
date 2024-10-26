@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.InsertIntoTableStatement;
-import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectTableStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectFromTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredicateExpression;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.PredicateTerm;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.QueryPredicate;
@@ -23,7 +23,7 @@ public class ChrySQLParserTest {
     public void testSelect() {
         String q1 = "select field1, field2 from table1;";
         ChrySQLParser parser = new ChrySQLParser(q1);
-        SelectTableStatement stmt = (SelectTableStatement) parser.parseSelect();
+        SelectFromTableStatement stmt = (SelectFromTableStatement) parser.parseSelect();
 
         Assertions.assertEquals(List.of("table1"), stmt.getTableNames());
         Assertions.assertEquals(List.of("field1", "field2"), stmt.getSelectFields());
@@ -31,7 +31,7 @@ public class ChrySQLParserTest {
 
         String q2 = "select field1, field2 from table1, table2 where field1 = 25;";
         parser = new ChrySQLParser(q2);
-        stmt = (SelectTableStatement) parser.parseSelect();
+        stmt = (SelectFromTableStatement) parser.parseSelect();
 
         Assertions.assertEquals(List.of("table1", "table2"), stmt.getTableNames());
         Assertions.assertEquals(List.of("field1", "field2"), stmt.getSelectFields());
@@ -42,7 +42,7 @@ public class ChrySQLParserTest {
 
         String q3 = "select * from table1, table2 where field1 = 25;";
         parser = new ChrySQLParser(q3);
-        stmt = (SelectTableStatement) parser.parseSelect();
+        stmt = (SelectFromTableStatement) parser.parseSelect();
 
         Assertions.assertEquals(List.of("table1", "table2"), stmt.getTableNames());
         Assertions.assertEquals(List.of(), stmt.getSelectFields());
@@ -69,7 +69,7 @@ public class ChrySQLParserTest {
     public void testAnyQuery() {
         String q1 = "select * from table1;";
         ChrySQLParser parser = new ChrySQLParser(q1);
-        SelectTableStatement stmt1 = (SelectTableStatement) parser.parse();
+        SelectFromTableStatement stmt1 = (SelectFromTableStatement) parser.parse();
         Assertions.assertEquals(List.of("table1"), stmt1.getTableNames());
         Assertions.assertEquals(List.of(), stmt1.getSelectFields());
         Assertions.assertEquals(new QueryPredicate(), stmt1.getPredicate());

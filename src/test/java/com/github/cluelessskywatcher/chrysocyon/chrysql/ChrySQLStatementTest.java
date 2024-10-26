@@ -10,7 +10,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
-import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectTableResult;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectFromTableResult;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.IntegerField;
 import com.github.cluelessskywatcher.chrysocyon.tuples.data.VarStringField;
@@ -49,7 +49,7 @@ public class ChrySQLStatementTest {
 
     @Test
     public void testPlainSelect() {
-        SelectTableResult selTable1 = (SelectTableResult) ChrySQLUtils.execute(
+        SelectFromTableResult selTable1 = (SelectFromTableResult) ChrySQLUtils.execute(
             "select * from human_species;", 
             db, transaction
         );
@@ -66,7 +66,7 @@ public class ChrySQLStatementTest {
 
     @Test
     public void testWithFilter() {
-        SelectTableResult selTable2 = (SelectTableResult) ChrySQLUtils.execute(
+        SelectFromTableResult selTable2 = (SelectFromTableResult) ChrySQLUtils.execute(
             "select * from human_species where species_number = 1;", 
             db, transaction
         );

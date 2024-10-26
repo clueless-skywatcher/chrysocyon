@@ -81,6 +81,14 @@ public class PageObject {
         setBytes(bytes, offset);
     }
 
+    public boolean getBoolean(int offset) {
+        return buffer.get() == 1 ? true : false;
+    }
+
+    public void setBoolean(boolean value, int offset) {
+        buffer.put(offset, (byte)(value ? 1 : 0));
+    }
+
     /**
      * Given the length of a string, calculate the maximum number of bytes
      * required to store that string, as per the supported Charset. E.g. For

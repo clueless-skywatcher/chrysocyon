@@ -18,13 +18,13 @@ import com.github.cluelessskywatcher.chrysocyon.tuples.data.DataField;
 
 import lombok.Getter;
 
-public class SelectTableStatement implements ChrySQLStatement {
+public class SelectFromTableStatement implements ChrySQLStatement {
     private @Getter List<String> tableNames;
     private @Getter List<String> selectFields;
     private @Getter QueryPredicate predicate;
     private @Getter ChrySQLStatementResult result;
 
-    public SelectTableStatement(List<String> tableNames, List<String> selectFields, QueryPredicate predicate) {
+    public SelectFromTableStatement(List<String> tableNames, List<String> selectFields, QueryPredicate predicate) {
         this.tableNames = tableNames;
         this.selectFields = selectFields;
         this.predicate = predicate;
@@ -69,6 +69,6 @@ public class SelectTableStatement implements ChrySQLStatement {
             rows.add(row);
         }
         timeTaken = System.currentTimeMillis() - timeTaken;
-        this.result = new SelectTableResult(fields, rows, timeTaken);
+        this.result = new SelectFromTableResult(fields, rows, timeTaken);
     }
 }

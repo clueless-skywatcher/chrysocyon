@@ -15,7 +15,7 @@ public class ChrysoFileManager {
     private Map<String, RandomAccessFile> openFiles = new HashMap<>();
     private @Getter int blocksRead = 0;
     private @Getter int blocksWritten = 0;
-
+    
     public ChrysoFileManager(File directory, int blockSize) {
         this.directory = directory;
         this.blockSize = blockSize;
@@ -25,6 +25,7 @@ public class ChrysoFileManager {
             directory.mkdirs();
         }
 
+        // Delete any temporary tables already present
         for (String file : directory.list()) {
             if (file.startsWith("temp")) {
                 new File(directory, file).delete();

@@ -40,7 +40,11 @@ public class ChrysocyonMain {
                 }
             }
         }
-
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                tx.commit();
+            }
+        });
         scanner.close();
     }
 }

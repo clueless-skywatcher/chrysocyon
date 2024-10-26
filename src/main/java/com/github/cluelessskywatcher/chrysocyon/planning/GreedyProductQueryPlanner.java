@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLParser;
-import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectTableStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectFromTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.metadata.MetadataManager;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 
@@ -20,13 +20,13 @@ public class GreedyProductQueryPlanner implements QueryPlanner {
     }
 
     @Override
-    public DatabasePlan createPlan(SelectTableStatement stmt, ChrysoTransaction txn) {
+    public DatabasePlan createPlan(SelectFromTableStatement stmt, ChrysoTransaction txn) {
         List<DatabasePlan> plans = new ArrayList<>();
         for (String tableName : stmt.getTableNames()) {
             String viewDef = mtdm.getViewDefinition(tableName, txn);
             if (viewDef != null) {
                 ChrySQLParser parser = new ChrySQLParser(viewDef);
-                SelectTableStatement viewStmt = (SelectTableStatement) parser.parseSelect();
+                SelectFromTableStatement viewStmt = (SelectFromTableStatement) parser.parseSelect();
                 plans.add(createPlan(viewStmt, txn));
             }
             else {
@@ -40,6 +40,8 @@ public class GreedyProductQueryPlanner implements QueryPlanner {
             DatabasePlan plan2 = new ProductPlan(otherPlan, plan);
             plan = (plan1.blocksAccessed() <= plan2.blocksAccessed()) ? plan1 : plan2;
         }
+        
+        plan = new SelectionPlan(plan, stmt.getPredicate());
 
         return new ProjectionPlan(plan, stmt.getSelectFields());
     }

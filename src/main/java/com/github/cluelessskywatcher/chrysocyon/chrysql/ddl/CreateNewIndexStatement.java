@@ -3,6 +3,7 @@ package com.github.cluelessskywatcher.chrysocyon.chrysql.ddl;
 import com.github.cluelessskywatcher.chrysocyon.Chrysocyon;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ChrySQLStatementResult;
+import com.github.cluelessskywatcher.chrysocyon.metadata.MetadataManager;
 import com.github.cluelessskywatcher.chrysocyon.transactions.ChrysoTransaction;
 
 import lombok.Getter;
@@ -22,7 +23,8 @@ public class CreateNewIndexStatement implements ChrySQLStatement {
     @Override
     public void execute(Chrysocyon db, ChrysoTransaction tx) {
         long timeTaken = System.currentTimeMillis();
-        // TODO: Main logic
+        MetadataManager metadataManager = db.getMetadataManager();
+        metadataManager.createIndex(indexName, tableName, fieldName, tx);
         timeTaken = System.currentTimeMillis() - timeTaken;
         this.result = new CreateNewIndexResult(indexName, tableName, fieldName, timeTaken);
     }

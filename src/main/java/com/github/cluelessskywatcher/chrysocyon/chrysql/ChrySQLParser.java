@@ -6,8 +6,10 @@ import java.util.List;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewIndexStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.ddl.CreateNewViewStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.DeleteFromTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.InsertIntoTableStatement;
-import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectTableStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dml.UpdateTableStatement;
+import com.github.cluelessskywatcher.chrysocyon.chrysql.dql.SelectFromTableStatement;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.exceptions.BadSyntaxException;
 import com.github.cluelessskywatcher.chrysocyon.chrysql.exceptions.ParsingException;
 import com.github.cluelessskywatcher.chrysocyon.processing.expressions.ExpressionOperator;
@@ -137,7 +139,7 @@ public class ChrySQLParser {
         catch (BadSyntaxException e) {
             throw new ParsingException("Missing query-ending semicolon");
         }
-        return new SelectTableStatement(tableNames, selectList, predicate);
+        return new SelectFromTableStatement(tableNames, selectList, predicate);
     }
 
     public ChrySQLStatement parseModification() {
@@ -156,12 +158,36 @@ public class ChrySQLParser {
         return null;
     }
 
-    private ChrySQLStatement parseDelete() {
-        throw new UnsupportedOperationException("Unimplemented method 'parseDelete'");
+    private ChrySQLStatement parseUpdate() {
+        lexer.consumeKeyword("update");
+        String tableName = lexer.consumeIdentifier();
+        lexer.consumeKeyword("set");
+        String fieldName = lexer.consumeIdentifier();
+        lexer.consumeDelimiter('=');
+        PredicateExpression expression = expression();
+        lexer.consumeKeyword("where");
+        QueryPredicate predicate = predicate();
+        lexer.consumeDelimiter(';');
+        return new UpdateTableStatement(tableName, fieldName, expression, predicate);
     }
 
-    private ChrySQLStatement parseUpdate() {
-        throw new UnsupportedOperationException("Unimplemented method 'parseUpdate'");
+    private DeleteFromTableStatement parseDelete() {
+        lexer.consumeKeyword("delete");
+        lexer.consumeKeyword("from");
+        String tableName = lexer.consumeIdentifier();
+        QueryPredicate predicate = new QueryPredicate();
+        if (lexer.matchKeyword("where")) {
+            lexer.consumeKeyword("where");
+            predicate = predicate();
+        }
+
+        try {
+            lexer.consumeDelimiter(';');
+        } catch (BadSyntaxException e) {
+            throw new ParsingException("Missing query-ending semicolon");
+        }
+
+        return new DeleteFromTableStatement(tableName, predicate);
     }
 
     private ChrySQLStatement parseCreate() {
@@ -235,6 +261,9 @@ public class ChrySQLParser {
             catch (BadSyntaxException e) {
                 throw new ParsingException("Need to specify varstr length");
             }
+        }
+        else {
+            throw new ParsingException("Need a valid data-type");
         }
 
         return schema;
